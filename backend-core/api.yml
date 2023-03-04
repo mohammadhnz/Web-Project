@@ -1,0 +1,326 @@
+openapi: 3.0.0
+# Added by API Auto Mocking Plugin
+info:
+  description: Torob2 Api
+  version: "1.0.0"
+  title: Torob2 Api
+tags:
+- name: "private"
+  description: "برای سرویس های داخلی."
+- name: "public"
+  description: "برای سرویس های خارجی"
+
+paths:
+  /cateogry/list/:
+    get:
+      tags:
+      - public
+      summary: لیست دسته ها با pagination
+      parameters:
+        - in: query
+          name: page
+          description: page number
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - in: query
+          name: size
+          description: number of records per page
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: returns categories in page
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  next:
+                    type: string
+                    nullable: true
+                    example: '/category/list?page=2&size=10'
+                    description: next page url if exists
+                  perv:
+                    type: string
+                    nullable: true
+                    example: null
+                    description: previous page url if exists
+                  count:
+                    type: integer
+                    description: total number of categories
+                    example: 110
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/categoryItem'
+  /product/create-or-update/:
+    post:
+      tags:
+      - private
+      summary: کرالرها از این اندپوینت جهت ذخیره اطلاعات محصولات در پایگاه داده استفاده میکنند.
+      description: crawler use this api to update backend
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/productCreateItem'
+      responses:
+        '200':
+          description: returns changed or created product UID
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  uid:
+                    description: a 12 digit unique identifier
+                    type: string
+                    example: qAzwSx3Ed6Yh
+  /product/list/:
+    get:
+      tags:
+      - public
+      summary: لیست محصولات با قابلیت فیلتر با دسته، محدوده قیمت، وضعیت موجودی و مرتب سازی و pagination 
+      parameters:
+        - in: query
+          name: category_id
+          description: use to filter products by category
+          required: false
+          schema:
+            type: integer
+            example: 1
+        - in: query
+          name: price__lt
+          description: use to filter products by max price
+          required: false
+          schema:
+            type: integer
+            example: 100000
+        - in: query
+          name: price__gt
+          description: use to filter products by min price
+          required: false
+          schema:
+            type: integer
+            example: 10000
+        - in: query
+          name: is_available
+          description: use to filter products by availability
+          required: false
+          schema:
+            type: boolean
+            example: true
+        - in: query
+          name: sort
+          description: use to sort products
+          required: false
+          schema:
+            type: string
+            enum: [price-, price, date_updated, date_updated-]
+            default: date_updated-
+        - in: query
+          name: page
+          description: page number
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - in: query
+          name: size
+          description: number of records per page
+          required: false
+          schema:
+            type: integer
+            default: 10
+
+      responses:
+        '200':
+          description: returns filtered products in page
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  next:
+                    type: string
+                    nullable: true
+                    example: '/product/list?page=2&size=10'
+                    description: next page url if exists
+                  perv:
+                    type: string
+                    nullable: true
+                    example: null
+                    description: previous page url if exists
+                  count:
+                    type: integer
+                    description: total number of products with the given filters
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/productListItem'
+  /product/redirect/:
+    get:
+      tags:
+      - public
+      summary: جهت دریافت آدرس محصول در سایت فروشنده و انتقال کاربر به سایت فروشنده
+      parameters:
+        - in: query
+          name: uid
+          description: uid of the required product
+          required: true
+          schema:
+            type: string
+            example: qAzwSx3Ed6Yh
+      responses:
+        '200':
+          description: returns the product url in shop
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  product_url:
+                    type: string
+                    example: 'http://digikala.com/DKP-1213'
+  /product/price-change/list/:
+    get:
+      tags:
+      - public
+      summary: لیست تغییرات قیمت محصول با pagination
+      parameters:
+        - in: query
+          name: uid
+          description: product uid
+          required: true
+          schema:
+            type: string
+            example: qAzwSx3Ed6Yh
+        - in: query
+          name: page
+          description: page number
+          required: false
+          schema:
+            type: integer
+            default: 1
+        - in: query
+          name: size
+          description: number of records per page
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: returns price change list
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  next:
+                    type: string
+                    nullable: true
+                    example: '/product/price-change/list?page=2&size=10'
+                    description: next page url if exists
+                  perv:
+                    type: string
+                    nullable: true
+                    example: null
+                    description: previous page url if exists
+                  count:
+                    type: integer
+                    description: total number of price changes
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        old_price:
+                          type: string
+                          example: 12,000,000 تومان
+                        new_price:
+                          type: string
+                          example: 13,000,000 تومان
+                        old_availability:
+                          type: boolean
+                          example: true
+                        new_availability:
+                          type: boolean
+                          example: true
+                        price-change-time:
+                          type: string
+                          example: '5 دقیقه پیش'
+
+components:
+  schemas:
+    categoryItem:
+      type: object
+      properties:
+        id:
+          example: 1
+          type: integer
+        name:
+          type: string
+          example: موبایل و تبلت
+        parent_id:
+          example: 7
+          type: integer
+
+    productCreateItem:
+      type: object
+      properties:
+        page_url: 
+          description: product url in shop
+          type: string
+          example: 'http://digikala.com/DKP-1213'
+        shop_domain:
+          type: string
+          example: 'digikala.com'
+        name:
+          type: string
+          example: موبایل آیفون xs max 64Gb
+        price:
+          type: integer
+          example: 12000000
+        is_available:
+          type: boolean
+          example: true
+        features:
+          type: string
+          example: {'حافظه': '24 Gb'}
+
+    productListItem:
+      type: object
+      properties:
+        uid:
+          description: a 12 digit unique identifier
+          type: string
+          example: qAzwSx3Ed6Yh
+        product_redirect_url: 
+          description: torob product more info url
+          type: string
+          example: '/product/redirect/?uid=qAzwSx3Ed6Yh'
+        product_price_list_url: 
+          type: string
+          example: '/product/price-change/list/?uid=qAzwSx3Ed6Yh'
+        shop_name:
+          type: string
+          example: دیجیکالا
+        name:
+          type: string
+          example: موبایل آیفون xs max 64Gb
+        price:
+          type: string
+          example: 12,000,000 تومان
+        is_available:
+          type: boolean
+          example: true
+        updated:
+          type: string
+          example: 12 دقیقه پیش
+
