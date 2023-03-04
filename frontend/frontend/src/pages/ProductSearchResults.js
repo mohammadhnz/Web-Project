@@ -22,6 +22,7 @@ import ListSubheader from "@mui/material/ListSubheader";
 import FiltersListItem from "../components/FiltersListItems";
 import categories from "../static/productCategories.json"
 import products from "../static/products.json"
+import ProductList from "../components/ProductList";
 
 
 const drawerWidth = 240;
@@ -57,7 +58,7 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
                 }),
                 width: theme.spacing(7),
                 [theme.breakpoints.up('sm')]: {
-                    width: theme.spacing(9),
+                    width: theme.spacing(8),
                 },
             }),
         },
@@ -76,7 +77,7 @@ export default function ProductSearchResults() {
 
     return (
         <div dir="rtl">
-            <Header title="تربچه" sections={sections} isInHome={false} />
+            <Header title="تربچه" sections={sections} isInHome={false} data={products.products.data.items}/>
             <ThemeProvider theme={mdTheme}>
                 <Box sx={{display: 'flex'}}>
                     <CssBaseline/>
@@ -98,7 +99,6 @@ export default function ProductSearchResults() {
                               component="nav"
                               aria-labelledby="nested-list-subheader">
                             <FiltersListItem/>
-                            <Divider sx={{my: 1}}/>
                         </List>
                     </Drawer>
                     <Box
@@ -116,37 +116,11 @@ export default function ProductSearchResults() {
                         <Toolbar/>
                         <Container maxWidth="lg" sx={{mt: 4, mb: 4}}>
                             <Grid container spacing={3}>
-                                {/* Chart */}
-                                <Grid item xs={12} md={8} lg={9}>
-                                    <Paper
-                                        sx={{
-                                            p: 2,
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            height: 240,
-                                        }}
-                                    >
-
-                                    </Paper>
-                                </Grid>
-                                {/* Recent Deposits */}
-                                <Grid item xs={12} md={4} lg={3}>
-                                    <Paper
-                                        sx={{
-                                            p: 2,
-                                            display: 'flex',
-                                            flexDirection: 'column',
-                                            height: 240,
-                                        }}
-                                    >
-
-                                    </Paper>
-                                </Grid>
                                 {/* Recent Orders */}
                                 <Grid item xs={12}>
-                                    <Paper sx={{p: 2, display: 'flex', flexDirection: 'column'}}>
-
-                                    </Paper>
+                                    <Box sx={{p: 2, display: 'flex', flexDirection: 'column'}}>
+                                        <ProductList/>
+                                    </Box>
                                 </Grid>
                             </Grid>
 

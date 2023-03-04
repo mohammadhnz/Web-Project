@@ -7,7 +7,10 @@ import SearchIcon from '@mui/icons-material/Search';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 import Search from "../forms/Search";
-
+import {BottomNavigationAction} from "@mui/material";
+import logo from "./images/beet.png";
+import { styled } from '@mui/material/styles';
+import {MainButton} from "./MainButton";
 
 function Header(props) {
     const {sections, title, isInHome, data} = props;
@@ -19,19 +22,20 @@ function Header(props) {
                         //if you want to show an error message
                         <Search data={data}/>
                     )}
+                    <span className="material-icons"><img src={logo} width='60' alt='\'/></span>
                     <Typography
                         component="h2"
-                        variant="h5"
-                        color="inherit"
+                        variant="h4"
+                        color="#8f032b"
                         align="center"
                         noWrap
                         sx={{flex: 1}}
                     >
                         {title}
                     </Typography>
-                    <Button variant="outlined" size="small">
+                    <MainButton variant="contained" size="small">
                         ثبت نام/ورود
-                    </Button>
+                    </MainButton>
                 </Toolbar>
                 <Toolbar
                     component="nav"
@@ -46,6 +50,7 @@ function Header(props) {
                             variant="body2"
                             href={section.url}
                             sx={{p: 1, flexShrink: 0}}
+                            underline="none"
                         >
                             {section.title}
                         </Link>

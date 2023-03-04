@@ -22,7 +22,7 @@ const useStyles = makeStyles(() => {
 
 export default function SearchInNav() {
     const {search} = useStyles();
-    const options = productCategories.products.data.items;
+    const options = productCategories.categories;
     console.log(options)
     const defaultProps = {
         options: options,
@@ -42,17 +42,17 @@ export default function SearchInNav() {
     return (
         <div dir='rtl' className="rmdp-rtl">
             <FormControl className="rmdp-rtl">
-                <Box sx={{display: 'flex', alignItems: 'flex-end', m: 1, mt: 2}}>
-                    <SearchIcon sx={{color: 'action.active', mr: 1, my: 0.5}}/>
+                <Box sx={{display: 'flex', alignItems: 'flex-end', m: 1, mt: 1}}>
+                    {/*<SearchIcon sx={{color: 'action.active', mr: 1, my: 0.5}}/>*/}
                     <Autocomplete
                         {...defaultProps}
                         autoHighlight
-                        sx={{width: 300}}
+                        sx={{width: 220}}
                         variant="standard"
                         onChange={handleChange}
                         renderInput={(params) => (
-                            <TextField {...params} placeholder="نام کالا را وارد کنید" id="to-field"
-                                       variant="standard">
+                            <TextField {...params} placeholder="نام برند" id="input-with-icon-textfield"
+                                       variant="outlined">
                                 )}
                             </TextField>
                         )}

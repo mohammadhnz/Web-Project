@@ -1,4 +1,5 @@
-import React, {FunctionComponent, useState} from "react";
+import React, {useState} from "react";
+import {ReactSearchAutocomplete} from "react-search-autocomplete";
 import {
     FormControl,
     InputAdornment,
@@ -6,9 +7,6 @@ import {
     createStyles,
     makeStyles
 } from "@material-ui/core";
-import SearchIcon from "@material-ui/icons/Search";
-import ClearIcon from "@material-ui/icons/Clear";
-import {Autocomplete, Box} from "@mui/material";
 
 const useStyles = makeStyles(() => {
     return createStyles({
@@ -36,25 +34,32 @@ export default function Search({data}) {
 
     };
 
+    const formatResult = (item) => {
+        console.log(item);
+        return (
+            <div className="result-wrapper">
+                <span className="result-span">{item.name}</span>
+            </div>
+        );
+    };
+
     return (
-        <div dir='rtl' className="rmdp-rtl">
-            <FormControl className="rmdp-rtl">
-                <Box sx={{ display: 'flex', alignItems: 'flex-end' ,m: 1, mt: 3 }}>
-                    <SearchIcon sx={{ color: 'action.active', mr: 1, my: 0.5 }} />
-                    <Autocomplete
-                        {...defaultProps}
-                        autoHighlight
-                        sx={{ width: 300 }}
-                        variant="standard"
-                        onChange={handleChange}
-                        renderInput={(params) => (
-                            <TextField {...params} placeholder="نام کالا را وارد کنید" id="to-field"
-                                       variant="standard">
-                                )}
-                            </TextField>
-                        )}
+        <div>
+            <FormControl>
+                <div style={{width: 300, margin: 10}}>
+                    <ReactSearchAutocomplete
+                        items={data}
+                        // onSearch={handleOnSearch}
+                        // onHover={handleOnHover}
+                        // onSelect={handleOnSelect}
+                        // onFocus={handleOnFocus}
+                        // onClear={handleOnClear}
+                        styling={{zIndex: 1, border: '2px solid #8f032b'}}
+                        formatResult={formatResult}
+                        autoFocus
                     />
-                </Box>
+                </div>
+                {/*</Box>*/}
             </FormControl>
         </div>
     );
