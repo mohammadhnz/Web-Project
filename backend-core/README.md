@@ -75,13 +75,6 @@ request های سرچ رو با استفاده از این view پاسخ بدی�
 
 با دانلود کردن فایل ``docker-compose.yml`` و اجرای آن با دستور ```docker compose up -d``` برنامه در port 8080 اجرا میشود
 
-#### ماک Suggestion
-برای mock سرویس suggestion، میتوانید از prism :استفاده کنید
-```commandline
-nvm use v16
-npm install -g @stoplight/prism-cli
-prism mock q1/suggestion.yml
-```
 
 ### Test Coverages:
 ```commandline
