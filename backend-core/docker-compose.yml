@@ -1,0 +1,29 @@
+version: '2'
+services:
+  postgres:
+    build:
+      context: .
+      dockerfile: Dockerfile.postgres
+    command: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - TZ=Asia/Tehran
+      - POSTGRES_HOST_AUTH_METHOD=trust
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      - TZ=Asia/Tehran
+      - discovery.type=single-node
+  project1:
+    image: registry.gitlab.com/mikaeelghorbani/backend-interveiw/project1:latest
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+      - elasticsearch
+    env_file:
+      - .env
