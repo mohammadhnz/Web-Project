@@ -1,14 +1,14 @@
 openapi: 3.0.0
 # Added by API Auto Mocking Plugin
 info:
-  description: This is a simple API
+  description: Torob2 Api
   version: "1.0.0"
-  title: Simple Torob API
+  title: Torob2 Api
 tags:
 - name: "private"
-  description: "سرویس های داخلی از این اند پوینت ها استفاده میکنند."
+  description: "برای سرویس های داخلی."
 - name: "public"
-  description: "کاربرها از این اندپوینت ها استفاده میکنند"
+  description: "برای سرویس های خارجی"
 
 paths:
   /cateogry/list/:
