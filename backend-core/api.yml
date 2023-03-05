@@ -163,6 +163,20 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/productListItem'
+  /product/detail/id/:
+    get:
+      tags:
+      - public
+      responses:
+        '200':
+          description: returns filtered products in page
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    $ref: '#/components/schemas/productItem'
   /product/redirect/:
     get:
       tags:
@@ -267,9 +281,6 @@ components:
         name:
           type: string
           example: موبایل و تبلت
-        parent_id:
-          example: 7
-          type: integer
 
     productCreateItem:
       type: object
@@ -278,6 +289,10 @@ components:
           description: product url in shop
           type: string
           example: 'http://digikala.com/DKP-1213'
+        image_url: 
+          description: image url in shop
+          type: string
+          example: 'http://digikala.com/image.jpg'
         shop_domain:
           type: string
           example: 'digikala.com'
@@ -324,3 +339,45 @@ components:
           type: string
           example: 12 دقیقه پیش
 
+
+
+    productItem:
+      type: object
+      properties:
+        uid:
+          description: a 12 digit unique identifier
+          type: string
+          example: qAzwSx3Ed6Yh
+        product_price_list_url: 
+          type: string
+          example: '/product/price-change/list/?uid=qAzwSx3Ed6Yh'
+        shops:
+          type: array
+          items:
+            type: object
+            properties:
+              redirect_url: 
+                description: torob product more info url
+                type: string
+                example: '/product/redirect/?uid=qAzwSx3Ed6Yh'
+              name:
+                type: string
+                example: دیجیکالا
+              price:
+                type: string
+                example: 13,000,000 تومان
+        name:
+          type: string
+          example: موبایل آیفون xs max 64Gb
+        price:
+          type: string
+          example: 12,000,000 تومان
+        is_available:
+          type: boolean
+          example: true
+        updated:
+          type: string
+          example: 12 دقیقه پیش
+        features:
+          type: array
+        
