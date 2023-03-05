@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
+from datetime import timedelta
 from pathlib import Path
 
 from decouple import config
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "core",
+    "crawler"
 ]
 
 MIDDLEWARE = [
@@ -130,3 +131,13 @@ STATIC_URL = "/static/"
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# Celery Settings
+
+CELERY_BROKER_URL = 'redis://redis:6379'
+
+# CELERY_BROKER_URL = 'amqp://{username}:{password}@{host}:5672//'.format(
+#     username=config('RABBITMQ_USERNAME'),
+#     password=secret('RABBITMQ_PASSWORD'),
+#     host=config('RABBITMQ_HOST')
+# )

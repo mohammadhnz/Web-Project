@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  redis:
+    image: redis:6.2-alpine
+    expose:
+      - "6379"
+    ports:
+      - "6380:6379"
+  postgres:
+    image: postgres
+    expose:
+      - "5432"
+    ports:
+      - "9091:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+    volumes:
+      - ./db_data:/var/lib/postgresql/data
+  web:
+    build: .
+    command: ./run_web.sh
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    depends_on:
+      - postgres
+  rabbit:
+    hostname: rabbit
+    image: rabbitmq:3.6.9
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=mypass
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ./run_celery.sh
+    volumes:
+      - .:/app:Z
+    links:
+      - postgres
+      - rabbit
+      - redis
+    depends_on:
+      - rabbit
+    # Celery worker
+  beat:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ./run_celery_beat.sh
+    volumes:
+      - .:/app:Z
+    links:
+      - worker
+      - postgres
+      - rabbit
+      - redis
+    depends_on:
+      - worker
+      - rabbit
