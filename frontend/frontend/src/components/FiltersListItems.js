@@ -10,10 +10,6 @@ import {Box, Checkbox, TextField} from "@mui/material";
 import categories from "../static/productCategories.json";
 import SearchInNav from "../forms/SearchInNav";
 import Grid from "@mui/material/Grid";
-import Paper from "@mui/material/Paper";
-import {styled} from '@mui/material/styles';
-import Button from "@mui/material/Button";
-import SearchIcon from "@material-ui/icons/Search";
 import {MainButton} from "./MainButton";
 
 
@@ -90,7 +86,7 @@ export default function FiltersListItem() {
                 {openPrice ? <ExpandLess/> : <ExpandMore/>}
             </ListItemButton>
             <Collapse in={openPrice} timeout="auto" unmountOnExit>
-                <Grid className=" rmdp-rtl" dir="rtl" container spacing={0.6}>
+                <Grid container spacing={0.6}>
                     <Grid item xs={5.5}>
                         <TextField label="از" variant="outlined" size="small"/>
                     </Grid>

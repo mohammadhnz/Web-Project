@@ -9,7 +9,6 @@ import Link from '@mui/material/Link';
 import Search from "../forms/Search";
 import {BottomNavigationAction} from "@mui/material";
 import logo from "./images/beet.png";
-import { styled } from '@mui/material/styles';
 import {MainButton} from "./MainButton";
 
 function Header(props) {

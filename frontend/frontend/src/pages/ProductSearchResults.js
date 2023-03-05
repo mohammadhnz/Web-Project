@@ -22,7 +22,7 @@ import ListSubheader from "@mui/material/ListSubheader";
 import FiltersListItem from "../components/FiltersListItems";
 import categories from "../static/productCategories.json"
 import products from "../static/products.json"
-import ProductList from "../components/ProductList";
+import ProductList from "../components/product/ProductList";
 
 
 const drawerWidth = 240;
@@ -114,17 +114,17 @@ export default function ProductSearchResults() {
                         }}
                     >
                         <Toolbar/>
-                        <Container maxWidth="lg" sx={{mt: 4, mb: 4}}>
-                            <Grid container spacing={3}>
-                                {/* Recent Orders */}
-                                <Grid item xs={12}>
+                        {/*<Container maxWidth="lg" sx={{mt: 4, mb: 4}}>*/}
+                        {/*    <Grid container spacing={1}>*/}
+                        {/*        /!* Recent Orders *!/*/}
+                        {/*        <Grid item xs={12}>*/}
                                     <Box sx={{p: 2, display: 'flex', flexDirection: 'column'}}>
                                         <ProductList/>
                                     </Box>
-                                </Grid>
-                            </Grid>
+                        {/*        </Grid>*/}
+                        {/*    </Grid>*/}
 
-                        </Container>
+                        {/*</Container>*/}
                     </Box>
                 </Box>
             </ThemeProvider>
