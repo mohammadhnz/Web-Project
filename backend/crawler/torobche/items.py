@@ -7,12 +7,10 @@ import scrapy
 
 
 class Product(scrapy.Item):
-    title = scrapy.Field()
-    url = scrapy.Field()
+    name = scrapy.Field()
+    page_url = scrapy.Field()
     image_url = scrapy.Field()
-
-    cost = scrapy.Field()
-    # features = scrapy.Field()
-
-
-
+    price = scrapy.Field()
+    is_available = scrapy.Field()
+    shop_domain = scrapy.Field()
+    features = scrapy.Field()

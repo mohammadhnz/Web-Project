@@ -10,9 +10,6 @@ class BaseScrapper(scrapy.Spider, ABC):
     shop_domain = ""
     allowed_domains = []
 
-    # def __init__(self, category=None, *args, **kwargs):
-    #     super(BaseScrapper, self).__init__(*args, **kwargs)
-    #     self.start_urls = [f'http://www.example.com/categories/{category}']
     def start_requests(self):
         for i in range(1, 2):
             yield scrapy.Request(
@@ -27,12 +24,17 @@ class BaseScrapper(scrapy.Spider, ABC):
         items = self._get_items(response)
         for item in items:
             product = Product()
-            product['title'] = self._get_title_from_item(item).strip()
+            product['name'] = self._get_title_from_item(item).strip()
             product['image_url'] = self._get_image_url(item).strip()
-            product['url'] = self._get_url(item).strip()
-            product['cost'] = self._get_cost(item)
-
-            yield product
+            product['page_url'] = self._get_url(item).strip()
+            product['price'] = self._get_cost(item)
+            product['is_available'] = self._get_activeness_status(item)
+            product['shop_domain'] = self.shop_domain
+            yield scrapy.Request(
+                product['page_url'],
+                callback=self._parse_product_page,
+                cb_kwargs=dict(product=product)
+            )
 
     @abstractmethod
     def _get_items(self, response):
@@ -53,3 +55,13 @@ class BaseScrapper(scrapy.Spider, ABC):
     @abstractmethod
     def _get_cost(self, item):
         pass
+
+    def _get_activeness_status(self, item):
+        return True
+
+    def _parse_product_page(self, response, product):
+        product['features'] = self._extract_features(response, product)
+        yield product
+
+    def _extract_features(self, response, product):
+        return dict()

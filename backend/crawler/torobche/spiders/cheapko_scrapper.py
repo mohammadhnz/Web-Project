@@ -3,11 +3,12 @@ import scrapy
 from crawler.torobche.spiders.base_scrapper import BaseScrapper
 
 
+
 class CheapkoSpider(BaseScrapper):
     name = "cheapko-scrapper"
     shop_domain = "cheapko.ir"
     base_url = "https://cheapko.ir/shop?sort=newest&page={page_number}"
-    allowed_domains = ["https://cheapko.ir"]
+    allowed_domains = ["https://cheapko.ir", "cheapko.ir"]
 
     def _get_cost(self, item):
         cost = -1
@@ -26,3 +27,14 @@ class CheapkoSpider(BaseScrapper):
 
     def _get_items(self, response):
         return response.css(".wz-shop-product-effect-none")
+
+    def _extract_features(self, response, product):
+        features_css = response.css('.wz-shop-product-description > ul > li')
+        features = {'general_features': []}
+        for feature in features_css:
+            items = feature.css('::text').extract()[0].split(':')
+            if len(items) == 2:
+                features[items[0]] = items[1]
+            else:
+                features['general_features'].append(items[0])
+        return features
