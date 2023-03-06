@@ -1,5 +1,6 @@
-import json
+from collections import defaultdict
 
+import json
 import environ
 from django.views.generic.edit import BaseFormView
 from django.views.generic.base import RedirectView
@@ -80,10 +81,36 @@ class Redirect(RedirectView):
 
 
 class CategoryList(ListView):
-    queryset = Category.objects.all()
+    queryset = Category.objects.filter(parent__isnull=True).all()
 
     def get_items(self, context):
         return [CategoryItemDTO(c).dict() for c in context['object_list']]
+
+
+class NestedCategoriesListView(ListView):
+    queryset = Category.objects.filter(parent__isnull=True).all()
+
+    def get_items(self, context):
+        parent_categories = context['object_list']
+        all_categories = Category.objects.all()
+        parents_map = defaultdict(set)
+        categories_data = {c.id: CategoryItemDTO(c).dict() for c in all_categories}
+        for category in all_categories:
+            parents_map[category.parent_id].add(category.id)
+
+        total_data = []
+        for category in parent_categories:
+            data = categories_data[category.id]
+            ct1s = parents_map[category.id]
+            ct1_data = []
+            for cid in ct1s:
+                ct2s = parents_map[cid]
+                c1_data = categories_data[cid]
+                c1_data['children'] = [c for c_id, c in categories_data.items() if c_id in ct2s]
+                ct1_data.append(c1_data)
+            data['children'] = ct1_data
+            total_data.append(data)
+        return total_data
 
 
 class PriceChange(ListView):
