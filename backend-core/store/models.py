@@ -28,7 +28,7 @@ class Category(models.Model):
 class Shop(models.Model):
     uid = models.CharField(primary_key=True, max_length=11, default=generate_uid, editable=False)
     name = models.CharField(max_length=50, unique=True)
-    city = models.CharField(max_length=50, unique=True)
+    city = models.CharField(max_length=50)
     domain = models.CharField(max_length=50, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
