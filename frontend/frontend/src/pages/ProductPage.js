@@ -12,6 +12,10 @@ import Chart from "../components/product/Chart";
 import ProductDetail from "../components/product/ProductDetail";
 import {useLocation} from 'react-router-dom'
 import products from "../static/products.json";
+import ProductList from "../components/product/ProductList";
+import Typography from "@mui/material/Typography";
+import ProductShopsList from "../components/product/ProductShopsList";
+import Divider from "@mui/material/Divider";
 
 const drawerWidth = 240;
 
@@ -32,20 +36,18 @@ const mdTheme = createTheme();
 
 function getProductData(product_id) {
     const data = products.products.data.items;
-    const product = data.find(({ id }) => id === product_id);
+    const product = data.find(({id}) => id === product_id);
     console.log(product)
     return product;
 }
 
 export default function ProductPage() {
     const location = useLocation()
-    console.log(location.state)
     const {product_id} = location.state
-    console.log(product_id)
     const product_data = getProductData(product_id);
     return (
         <div dir="rtl">
-            <Header title="تربچه" sections={sections} isInHome={false}/>
+            <Header title="تربچه" sections={sections} isInHome={false} isLogged={false} data={products.products.data.items}/>
             <ThemeProvider theme={mdTheme}>
                 <Box sx={{display: 'flex'}}>
                     <CssBaseline/>
@@ -90,7 +92,6 @@ export default function ProductPage() {
                                         <Chart/>
                                     </Paper>
                                 </Grid>
-
                                 <Grid item xs={12} md={8} lg={8}>
                                     <Paper
                                         sx={{
@@ -98,9 +99,13 @@ export default function ProductPage() {
                                             display: 'flex',
                                             flexDirection: 'column',
                                             height: 400,
+                                            overflow: 'auto'
                                         }}
                                     >
-
+                                        <Typography variant="h6" sx={{
+                                            fontWeight: 'bold',
+                                        }}>فروشنده ها</Typography>
+                                        <ProductShopsList/>
                                     </Paper>
                                 </Grid>
                                 {/* Recent Deposits */}
@@ -113,12 +118,22 @@ export default function ProductPage() {
                                             height: 400,
                                         }}
                                     >
-
+                                        <Typography variant="h6" sx={{
+                                            fontWeight: 'bold',
+                                        }}> مشخصات {product_data.name}</Typography>
+                                        <Typography variant="subtitle2" sx={{marginTop: 5}}>مشخصات کلی</Typography>
+                                        <Divider/>
                                     </Paper>
                                 </Grid>
 
+                                <Grid item xs={12} md={12} lg={12} alignContent="center">
+                                    <Typography align="center" alignContent="center" variant="h5">محصولات
+                                        مشابه</Typography>
+                                    <Box sx={{p: 2, display: 'flex', flexDirection: 'column'}}>
+                                        <ProductList/>
+                                    </Box>
+                                </Grid>
                             </Grid>
-
                         </Container>
                     </Box>
                 </Box>

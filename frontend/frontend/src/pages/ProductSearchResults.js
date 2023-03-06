@@ -77,7 +77,7 @@ export default function ProductSearchResults() {
 
     return (
         <div dir="rtl">
-            <Header title="تربچه" sections={sections} isInHome={false} data={products.products.data.items}/>
+            <Header title="تربچه" sections={sections} isInHome={false} data={products.products.data.items} isLogged={false}/>
             <ThemeProvider theme={mdTheme}>
                 <Box sx={{display: 'flex'}}>
                     <CssBaseline/>

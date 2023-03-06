@@ -20,7 +20,7 @@ const sections = [
 export default function Home() {
     return (
         <div dir='rtl' className=" rmdp-rtl">
-            <Header title="تربچه" sections={sections} isInHome={true}/>
+            <Header title="تربچه" sections={sections} isInHome={true} isLogged={false} data={products.products.data.items}/>
             <CssBaseline/>
             <Container align="center">
                 <h3>کالایی که میخواهید را وارد کنید</h3>

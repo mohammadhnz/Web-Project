@@ -11,26 +11,11 @@ tags:
   description: "برای سرویس های خارجی"
 
 paths:
-  /cateogry/list/:
+  /main_cateogry/list/:
     get:
       tags:
       - public
-      summary: لیست دسته ها با pagination
-      parameters:
-        - in: query
-          name: page
-          description: page number
-          required: false
-          schema:
-            type: integer
-            default: 1
-        - in: query
-          name: size
-          description: number of records per page
-          required: false
-          schema:
-            type: integer
-            default: 10
+      summary: لیست دسته های مهم
       responses:
         '200':
           description: returns categories in page
@@ -39,24 +24,35 @@ paths:
               schema:
                 type: object
                 properties:
-                  next:
-                    type: string
-                    nullable: true
-                    example: '/category/list?page=2&size=10'
-                    description: next page url if exists
-                  perv:
-                    type: string
-                    nullable: true
-                    example: null
-                    description: previous page url if exists
-                  count:
-                    type: integer
-                    description: total number of categories
-                    example: 110
                   results:
                     type: array
                     items:
                       $ref: '#/components/schemas/categoryItem'
+  /nested_categories/:
+    get:
+      parameters:
+          - in: query
+            name: base_category
+            description: use to get child categories of given category
+            required: false
+            schema:
+              type: string
+              example: "mobile"
+      tags:
+      - public
+      summary: دیشکنری دسته ها
+      responses:
+        '200':
+          description: return nested categories
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/catl1'
   /product/create-or-update/:
     post:
       tags:
@@ -85,7 +81,7 @@ paths:
     get:
       tags:
       - public
-      summary: لیست محصولات با قابلیت فیلتر با دسته، محدوده قیمت، وضعیت موجودی و مرتب سازی و pagination 
+      summary: لیست محصولات با قابلیت فیلتر با دسته، محدوده قیمت، وضعیت موجودی و مرتب سازی و pagination
       parameters:
         - in: query
           name: category_id
@@ -205,7 +201,7 @@ paths:
     get:
       tags:
       - public
-      summary: لیست تغییرات قیمت محصول با pagination
+      summary: لیست تغییرات قیمت محصول
       parameters:
         - in: query
           name: uid
@@ -214,20 +210,6 @@ paths:
           schema:
             type: string
             example: qAzwSx3Ed6Yh
-        - in: query
-          name: page
-          description: page number
-          required: false
-          schema:
-            type: integer
-            default: 1
-        - in: query
-          name: size
-          description: number of records per page
-          required: false
-          schema:
-            type: integer
-            default: 10
       responses:
         '200':
           description: returns price change list
@@ -236,39 +218,17 @@ paths:
               schema:
                 type: object
                 properties:
-                  next:
-                    type: string
-                    nullable: true
-                    example: '/product/price-change/list?page=2&size=10'
-                    description: next page url if exists
-                  perv:
-                    type: string
-                    nullable: true
-                    example: null
-                    description: previous page url if exists
-                  count:
-                    type: integer
-                    description: total number of price changes
                   results:
                     type: array
                     items:
                       type: object
                       properties:
-                        old_price:
-                          type: string
-                          example: 12,000,000 تومان
-                        new_price:
-                          type: string
-                          example: 13,000,000 تومان
-                        old_availability:
-                          type: boolean
-                          example: true
-                        new_availability:
-                          type: boolean
-                          example: true
-                        price-change-time:
-                          type: string
-                          example: '5 دقیقه پیش'
+                        price:
+                          type: integer
+                          example: 10
+                        date:
+                          type: integer
+                          example: 1678823495
 
 components:
   schemas:
@@ -282,14 +242,52 @@ components:
           type: string
           example: موبایل و تبلت
 
+    catl1:
+      type: object
+      properties:
+        name:
+          example: 'موبایل و تلوزیون'
+          type: string
+        link:
+          example: 'https://torobche.ir/product/list/?category=موبایل و تلوزیون'
+          type: string
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/catl2'
+
+    catl2:
+      type: object
+      properties:
+        name:
+          example: 'موبایل'
+          type: string
+        link:
+          example: 'https://torobche.ir/product/list/?category=موبایل'
+          type: string
+        children:
+          type: array
+          items:
+            $ref: '#/components/schemas/catl3'
+
+    catl3:
+      type: object
+      properties:
+        link:
+          example: 'https://torobche.ir/product/list/?category=آیفون'
+          type: string
+        name:
+          example: 'موبایل آیفون'
+          type: string
+
     productCreateItem:
       type: object
       properties:
-        page_url: 
+        page_url:
           description: product url in shop
           type: string
           example: 'http://digikala.com/DKP-1213'
-        image_url: 
+        image_url:
           description: image url in shop
           type: string
           example: 'http://digikala.com/image.jpg'
@@ -312,20 +310,17 @@ components:
     productListItem:
       type: object
       properties:
-        uid:
-          description: a 12 digit unique identifier
-          type: string
-          example: qAzwSx3Ed6Yh
-        product_redirect_url: 
+        product_url:
           description: torob product more info url
           type: string
+          example: '/product/detail/qAzwSx3Ed6Yh'
+        product_image_url:
+          description: torob product image url
+          type: string
           example: '/product/redirect/?uid=qAzwSx3Ed6Yh'
-        product_price_list_url: 
-          type: string
-          example: '/product/price-change/list/?uid=qAzwSx3Ed6Yh'
-        shop_name:
-          type: string
-          example: دیجیکالا
+        shop_count:
+          type: integer
+          example: 10
         name:
           type: string
           example: موبایل آیفون xs max 64Gb
@@ -348,21 +343,27 @@ components:
           description: a 12 digit unique identifier
           type: string
           example: qAzwSx3Ed6Yh
-        product_price_list_url: 
+        product_price_list_url:
           type: string
           example: '/product/price-change/list/?uid=qAzwSx3Ed6Yh'
+        product_image_url:
+          type: string
+          example: '/image/hewfjw.jpg'
         shops:
           type: array
           items:
             type: object
             properties:
-              redirect_url: 
+              redirect_url:
                 description: torob product more info url
                 type: string
                 example: '/product/redirect/?uid=qAzwSx3Ed6Yh'
               name:
                 type: string
                 example: دیجیکالا
+              city:
+                type: string
+                example: تبریز
               price:
                 type: string
                 example: 13,000,000 تومان
@@ -380,4 +381,6 @@ components:
           example: 12 دقیقه پیش
         features:
           type: array
+          items:
+            type: object
         
