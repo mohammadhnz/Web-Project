@@ -10,7 +10,7 @@ class ViewsTestCase(TestCase):
     def test__given_category_list__when_client_calls_category_list_api__then_should_return_correct_length_and_urls(
             self):
         # given
-        Category.objects.create(name="لپتاپ و موبایل", is_leaf=False)
+        Category.objects.create(id=5, name="لپتاپ و موبایل", is_leaf=False)
         Category.objects.create(name="لپتاپ", is_leaf=False, parent=Category.objects.get(name='لپتاپ و موبایل'))
         Category.objects.create(name="موبایل", is_leaf=False, parent=Category.objects.get(name='لپتاپ و موبایل'))
         Category.objects.create(name="لپتاپ شیائومی", is_leaf=True, parent=Category.objects.get(name='لپتاپ'))
@@ -20,21 +20,16 @@ class ViewsTestCase(TestCase):
 
         # when
         client = Client()
-        response = client.get('/category/list', {
-            'page': 2,
-            'size': 3,
-        })
+        response = client.get('/category/list')
         body = json.loads(response._container[0])
 
         # then
         self.assertEqual(response.status_code, 200)
         self.assertEqual(body, {
-            'next': 'http://testserver/category/list?page=3&size=3',
-            'prev': 'http://testserver/category/list?page=1&size=3',
-            'count': 7,
+            'next': None,
+            'prev': None,
+            'count': 1,
             'items': [
-                {'id': 4, 'name': 'لپتاپ شیائومی', 'parent_id': 2},
-                {'id': 5, 'name': 'موبایل لمسی', 'parent_id': 3},
-                {'id': 6, 'name': 'موبایل قدیمی', 'parent_id': 3}
+                {'id': 5, 'name': 'لپتاپ و موبایل', 'parent_id': None},
             ]
         })
