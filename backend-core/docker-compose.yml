@@ -16,10 +16,14 @@ services:
       - "9200:9200"
       - "9300:9300"
     environment:
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms750m -Xmx750m
       - TZ=Asia/Tehran
       - discovery.type=single-node
   project1:
-    image: registry.gitlab.com/mikaeelghorbani/backend-interveiw/project1:latest
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "8080:8080"
     depends_on:
