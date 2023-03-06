@@ -83,13 +83,13 @@ class ProductHistory(models.Model):
         return best_product
 
     @staticmethod
-    def get_last_history(product: Product) -> ProductHistory:
+    def get_last_history(product: Product):
         last_history = ProductHistory.objects.filter(product=product).order_by('-created_at')[:1]
         if len(last_history) == 0:
             return None
         return last_history[0]
 
-    def get_previous_history(self) -> ProductHistory:
+    def get_previous_history(self):
         last_history = ProductHistory.objects.filter(
             product=self.product,
             created_at__lt=self.created_at

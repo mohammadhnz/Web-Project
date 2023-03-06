@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 
 from .documents import ProductDocument
-from .dtos import ProductCreateOrUpdateForm, ProductPriceChangeListDTO, CategoryItemDTO, ProductItemDTO, \
+from .dtos import ProductCreateOrUpdateForm, ProductPriceChangeListDTO, CategoryItemDTO, ProductListItemDTO, \
     ProductListQuery
 from .models import ProductHistory, Category, Product, Shop
 from .usecase import suggest_category
@@ -89,4 +89,4 @@ class ProductList(ListView):
         return ProductDocument.create_query(ProductListQuery(self.request.GET)).execute()
 
     def get_items(self, context):
-        return [ProductItemDTO(x).dict() for x in context['object_list']]
+        return [ProductListItemDTO(x).dict() for x in context['object_list']]
