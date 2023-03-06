@@ -185,7 +185,7 @@ class ProductListQuery(DataClass):
                 range_query['lt'] = int(price__lt)
             if price__gt is not None:
                 range_query['gt'] = int(price__gt)
-            self.filters.append(('range', {'last_history__price': range_query}))
+            self.filters.append(('range', {'last_history__min_price': range_query}))
 
         is_available = query.get('is_available', None)
         if is_available is not None:

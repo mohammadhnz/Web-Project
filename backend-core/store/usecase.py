@@ -50,6 +50,9 @@ def suggest_base_product(name: str, features: dict, category_id, price):
 
 
 def get_or_select_base_product(name: str, category_id, features: dict, price):
+    x = [t for t in BaseProduct.objects.filter(name=name)]
+    if len(x) > 0:
+        return x[0]
     print(name, category_id, price)
     products = run_query(name, category_id, price * 1.3, price * 0.7)
     if len(products) > 0:
