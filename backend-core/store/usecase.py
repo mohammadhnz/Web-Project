@@ -1,3 +1,5 @@
+from store.documents import ProductDocument
+from store.dtos import ProductListQuery
 from store.models import Category
 
 
@@ -30,3 +32,16 @@ def suggest_category(name: str, features: dict):
         if max_score is None or score > max_score:
             max_score, best_id = score, category.id
     return best_id
+
+
+def suggest_base_product(name: str, features: dict, category_id, price):
+    query = ProductListQuery({
+        'price__gt': price * 0.7,
+        'price__lt': price * 1.3,
+        'category_id': category_id,
+    })
+    query.filters.append(('fuzzy', {'name': {"value": name}}))
+
+    products = ProductDocument.create_query(query).execute()
+    print(products)
+    return products[0].uid

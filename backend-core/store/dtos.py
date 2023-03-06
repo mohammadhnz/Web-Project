@@ -2,14 +2,15 @@ import json
 
 from django import forms
 from dataclasses import dataclass, asdict
-from typing import List, Optional
+from typing import List, Optional, Dict
 from datetime import datetime
 
-from .models import ProductHistory, Category
+from .models import ProductHistory, Category, Product, BaseProduct
 
 
 class ProductCreateOrUpdateForm(forms.Form):
     page_url = forms.CharField(max_length=300, required=True)
+    image_url = forms.CharField(max_length=300, required=True)
     shop_domain = forms.CharField(max_length=200, required=True)
     name = forms.CharField(max_length=200, required=True)
     price = forms.IntegerField(required=True)
@@ -85,7 +86,7 @@ class CategoryItemDTO(DataClass):
 
 
 @dataclass
-class ProductItemDTO(DataClass):
+class ProductShopDTO(DataClass):
     uid: str
     product_redirect_url: str
     product_price_list_url: str
@@ -95,13 +96,75 @@ class ProductItemDTO(DataClass):
     is_available: bool
     updated: str
 
+    def __init__(self, product: Product):
+        self.redirect_url = '/product/redirect/?uid={}'.format(product.uid)
+        self.name = product.shop.name
+        self.city = product.shop.city
+        self.price = ProductHistory.get_last_history_for_shop(product)
+
+
+@dataclass
+class FeatureDTO(DataClass):
+    name: str
+    value: str
+
+    def __init__(self, name: str, value: str):
+        self.name = name
+        self.value = value
+
+    @staticmethod
+    def construct_features(features: Dict) -> List:
+        result = []
+        for name, value in features:
+            result.append(FeatureDTO(name, value))
+        return result
+
+
+@dataclass
+class ProductDetailItemDTO(DataClass):
+    uid: str
+    product_redirect_url: str
+    product_price_list_url: str
+    shop_name: str
+    name: str
+    price: str
+    is_available: bool
+    updated: str
+    features: List[FeatureDTO]
+
+    def __init__(self, base_product: BaseProduct, available_products: List[Product]):
+        product = ProductHistory.get_best_product(base_product)
+        last_history = ProductHistory.get_last_history(product)
+
+        self.uid = base_product.uid
+        self.product_price_list_url = '/product/price-change/list/?uid={}'.format(base_product.uid)
+        self.product_image_url = product.image_url
+        self.shops = sorted([ProductShopDTO(product) for product in available_products], key=lambda x: x.price)
+        self.best_price_redirect_url = '/product/redirect/?uid={}'.format(product.uid)
+
+        self.name = base_product.name
+        self.price = last_history.price
+        self.is_available = last_history.is_available
+        self.updated = last_history.created_at
+        self.features = FeatureDTO.construct_features(product.features)
+
+
+@dataclass
+class ProductListItemDTO(DataClass):
+    product_url: str
+    product_image_url: str
+    shop_count: int
+    name: str
+    price: str
+    is_available: bool
+    updated: str
+
     def __init__(self, product):
-        self.uid = product.uid
-        self.product_redirect_url = '/product/redirect/?uid={}'.format(product.uid)
-        self.product_price_list_url = '/product/price-change/list/?uid={}'.format(product.uid)
-        self.shop_name = product.shop.name
+        self.product_url = '/product/detail/{}'.format(product.uid)
+        self.product_image_url = product.image_url
+        self.shop_count = product.shop_count
         self.name = product.name
-        self.price = product.last_history.price
+        self.price = product.last_history.min_price
         self.is_available = product.last_history.is_available
         self.updated = product.last_history.created_at
 

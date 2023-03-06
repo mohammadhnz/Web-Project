@@ -1,4 +1,3 @@
-import requests as requests
 import environ
 from django.views.generic.edit import BaseFormView
 from django.views.generic.base import RedirectView
@@ -41,6 +40,9 @@ class ListView(BaseListView):
                              'prev': self.get_prev_url(context['page_obj']),
                              'count': context['paginator'].count,
                              'items': self.get_items(context)})
+
+    def get_items(self, context):
+        pass
 
 
 class CreateOrUpdate(BaseFormView):
