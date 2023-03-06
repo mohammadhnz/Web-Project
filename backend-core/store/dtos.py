@@ -34,10 +34,6 @@ class ProductCreateOrUpdateForm(forms.Form):
         data = self.cleaned_data
         return {'domain': data.get('shop_domain')}
 
-    def suggestion_fields(self):
-        data = self.cleaned_data
-        return {'name': data.get('name'), 'features': data.get('features')}
-
 
 @dataclass
 class DataClass:

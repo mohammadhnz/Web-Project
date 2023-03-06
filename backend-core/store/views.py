@@ -10,6 +10,7 @@ from .documents import ProductDocument
 from .dtos import ProductCreateOrUpdateForm, ProductPriceChangeListDTO, CategoryItemDTO, ProductItemDTO, \
     ProductListQuery
 from .models import ProductHistory, Category, Product, Shop
+from .usecase import suggest_category
 from .utils import replace_query
 
 env = environ.Env()
@@ -49,9 +50,7 @@ class CreateOrUpdate(BaseFormView):
     def form_valid(self, form):
         data = form.cleaned_data
         form.shop = get_object_or_404(Shop, domain=data.get('shop_domain'))
-        suggestion = requests.post('{}/product/suggest-category/'.format(env('SUGGESTOIN_BASE_URL')),
-                                   json=form.suggestion_fields())
-        form.category_id = int(suggestion.json()['id'])
+        form.category_id = suggest_category(form.get('name'), form.get('features'))
         form.product, _ = Product.objects.update_or_create(name=data.get('name'), defaults=form.product_fields())
         ProductHistory.objects.create(**form.product_history_fields())
         ProductDocument().update(form.product)

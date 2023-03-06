@@ -8,6 +8,7 @@ class Category(models.Model):
     name = models.CharField(max_length=50)
     parent = models.ForeignKey('self', blank=True, null=True, on_delete=models.RESTRICT)
     is_leaf = models.BooleanField()
+    related_words = HStoreField(null=True, blank=True)
 
     class Meta:
         ordering = ['id']
