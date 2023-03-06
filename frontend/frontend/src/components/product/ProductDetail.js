@@ -7,6 +7,7 @@ import IconButton from "@mui/material/IconButton";
 import {FavoriteBorderOutlined, Notifications, Share} from "@material-ui/icons";
 import {MainButton} from "../MainButton";
 import {FlagOutlined} from "@ant-design/icons";
+import {Image} from "antd";
 
 export default function ProductDetail({data}) {
 
@@ -22,17 +23,21 @@ export default function ProductDetail({data}) {
         <>
             <Container maxWidth="lg" sx={{mt: 4, mb: 4}}>
                 <Grid container spacing={4}>
-                    <Grid item xs={12} md={4} lg={4} alignContent="center">
-                        <Box
-                            component="img"
-                            sx={{
-                                width: 150,
-                                height: 150,
-                            }}
-                            src={noImage}
-                            alt="Product Image"
-                        >
-                        </Box>
+                    <Grid item xs={12} md={2} lg={3} alignContent="center">
+                        {/*<Box*/}
+                        {/*    component="img"*/}
+                        {/*    sx={{*/}
+                        {/*        width: 150,*/}
+                        {/*        height: 150,*/}
+                        {/*    }}*/}
+                        {/*    src={noImage}*/}
+                        {/*    alt="Product Image"*/}
+                        {/*>*/}
+                        {/*</Box>*/}
+                        <Image sx={{
+                            width: 120,
+                            height: 120,
+                        }} src={noImage} className="githubIcon"/>
                     </Grid>
                     <Grid item xs={12} md={8} lg={8}>
                         <Grid
@@ -56,10 +61,10 @@ export default function ProductDetail({data}) {
                             <IconButton title="مورد علاقه">
                                 <FavoriteBorderOutlined/>
                             </IconButton>
-                            <IconButton  title="اشتراک گذاری">
+                            <IconButton title="اشتراک گذاری">
                                 <Share/>
                             </IconButton>
-                            <IconButton  title="گزارش مشکل">
+                            <IconButton title="گزارش مشکل">
                                 <FlagOutlined/>
                             </IconButton>
                         </Grid>
