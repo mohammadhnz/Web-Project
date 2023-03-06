@@ -1,6 +1,8 @@
+from elasticsearch_dsl import Q
+
 from store.documents import ProductDocument
 from store.dtos import ProductListQuery
-from store.models import Category
+from store.models import Category, BaseProduct
 
 
 def find_phrase_score(phr, name: str, features: dict):
@@ -43,18 +45,39 @@ def suggest_base_product(name: str, features: dict, category_id, price):
     query.filters.append(('fuzzy', {'name': {"value": name}}))
 
     products = ProductDocument.create_query(query).execute()
-    print("IEHFIEHFFHEFI", products)
     return products[0].uid
 
 
-def get_or_create_base_product(name: str, features: dict, category_id, price):
-    query = ProductListQuery({
-        'price__gt': price * 0.7,
-        'price__lt': price * 1.3,
-        'category_id': category_id,
-    })
-    query.filters.append(('fuzzy', {'name': {"value": name}}))
+def get_or_select_base_product(name: str, category_id, features: dict, price):
+    print(name, category_id, price)
+    products = run_query(name, category_id, price * 1.3, price * 0.7)
+    if len(products) > 0:
+        base = [c for c in BaseProduct.objects.filter(uid=products[0].uid)][0]
+        return base
 
-    products = ProductDocument.create_query(query).execute()
-    print(products)
-    return products[0].uid
+    category = [c for c in Category.objects.filter(id=category_id)][0]
+    return BaseProduct.objects.create(name=name, category=category)
+
+
+def run_query(query: str, category_id, price__lt, price__gt, result_count: int = 1):
+    search = ProductDocument.search()
+    search = search.query(Q('bool',
+                            should=[_get_match_query("name", query),
+                                    {'term': {'categories__id': category_id}},
+                                    {'term': {'price__lt': price__lt}},
+                                    {'term': {'price__gt': price__gt}}],
+                            minimum_should_match=1))
+    results = search.execute()[:result_count]
+    return results
+
+
+def _get_match_query(field, value):
+    return {
+        "match": {
+            field: {
+                "query": value,
+                "operator": "and",
+                "fuzziness": "AUTO"
+            }
+        }
+    }

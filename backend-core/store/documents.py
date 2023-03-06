@@ -69,4 +69,6 @@ class ProductDocument(Document):
         search = ProductDocument().search()
         for f in query.filters:
             search = search.filter(f[0], **f[1])
+        if search.sort is None:
+            return search
         return search.sort(query.sort)
