@@ -62,7 +62,7 @@ class ProductDocument(Document):
     @staticmethod
     def prepare_features(base_product: BaseProduct):
         product = ProductHistory.get_best_product(base_product)
-        return FeatureDTO.construct_features(product.features)
+        return [x.dict() for x in FeatureDTO.construct_features(product.features)]
 
     @staticmethod
     def create_query(query: ProductListQuery):

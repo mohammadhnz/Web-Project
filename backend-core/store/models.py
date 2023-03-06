@@ -50,6 +50,7 @@ class BaseProduct(models.Model):
 
 class Product(models.Model):
     uid = models.CharField(primary_key=True, max_length=11, default=generate_uid, editable=False)
+    name = models.CharField(unique=True, max_length=200, editable=False)
     base_product = models.ForeignKey(BaseProduct, on_delete=models.RESTRICT)
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
     page_url = models.CharField(max_length=200)

@@ -23,7 +23,7 @@ class ProductCreateOrUpdateForm(forms.Form):
                 'page_url': data.get('page_url'),
                 'features': json.loads(data.get('features')),
                 'shop': self.shop,
-                'category_id': self.category_id}
+                'base_product': self.base_product}
 
     def product_history_fields(self):
         data = self.cleaned_data
@@ -115,8 +115,8 @@ class FeatureDTO(DataClass):
     @staticmethod
     def construct_features(features: Dict) -> List:
         result = []
-        for name, value in features:
-            result.append(FeatureDTO(name, value))
+        for name in features:
+            result.append(FeatureDTO(name, features[name]))
         return result
 
 

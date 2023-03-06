@@ -1,3 +1,5 @@
+import json
+
 import environ
 from django.views.generic.edit import BaseFormView
 from django.views.generic.base import RedirectView
@@ -8,8 +10,8 @@ from django.shortcuts import get_object_or_404
 from .documents import ProductDocument
 from .dtos import ProductCreateOrUpdateForm, ProductPriceChangeListDTO, CategoryItemDTO, ProductListItemDTO, \
     ProductListQuery
-from .models import ProductHistory, Category, Product, Shop
-from .usecase import suggest_category
+from .models import ProductHistory, Category, Product, Shop, BaseProduct
+from .usecase import suggest_category, suggest_base_product
 from .utils import replace_query
 
 env = environ.Env()
@@ -52,10 +54,19 @@ class CreateOrUpdate(BaseFormView):
     def form_valid(self, form):
         data = form.cleaned_data
         form.shop = get_object_or_404(Shop, domain=data.get('shop_domain'))
-        form.category_id = suggest_category(form.get('name'), form.get('features'))
+        form.category_id = suggest_category(data.get('name'), json.loads(data.get('features')))
+        print("result cat", form.category_id)
+        """form.base_product_id = suggest_base_product(data.get('name'),
+                                                    json.loads(data.get('features')),
+                                                    data.get('category_id'),
+                                                    data.get('price'))
+        """
+        x = [rr for rr in Category.objects.filter(id=form.category_id)][0]
+        form.base_product = BaseProduct.objects.create(name=data.get('name'),
+                                                       category=x)
         form.product, _ = Product.objects.update_or_create(name=data.get('name'), defaults=form.product_fields())
         ProductHistory.objects.create(**form.product_history_fields())
-        ProductDocument().update(form.product)
+        ProductDocument().update(form.base_product)
         return JsonResponse({"uid": form.product.uid})
 
     def form_invalid(self, form):

@@ -8,8 +8,8 @@ def find_phrase_score(phr, name: str, features: dict):
     if name.find(phr) != -1:
         score += 10
 
-    for key, value in features:
-        if value.find(phr) != -1:
+    for key in features:
+        if features.get(key).find(phr) != -1:
             score += 3
     return score
 
@@ -17,9 +17,9 @@ def find_phrase_score(phr, name: str, features: dict):
 def calculate_score(category, name: str, features: dict):
     score = 10 * find_phrase_score(category.name, name, features)
 
-    for word, zrb in category.related_words:
+    for word in category.related_words:
         if name.find(category.name) != -1:
-            score += zrb * find_phrase_score(word, name, features)
+            score += int(category.related_words.get(word)) * find_phrase_score(word, name, features)
     return score
 
 
@@ -35,6 +35,19 @@ def suggest_category(name: str, features: dict):
 
 
 def suggest_base_product(name: str, features: dict, category_id, price):
+    query = ProductListQuery({
+        'price__gt': price * 0.7,
+        'price__lt': price * 1.3,
+        'category_id': category_id,
+    })
+    query.filters.append(('fuzzy', {'name': {"value": name}}))
+
+    products = ProductDocument.create_query(query).execute()
+    print("IEHFIEHFFHEFI", products)
+    return products[0].uid
+
+
+def get_or_create_base_product(name: str, features: dict, category_id, price):
     query = ProductListQuery({
         'price__gt': price * 0.7,
         'price__lt': price * 1.3,
