@@ -65,10 +65,10 @@ DOWNLOADER_MIDDLEWARES = {
 
 # Configure item pipelines
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    "torobche.pipelines.TorobchePipeline": 300,
-#}
-
+ITEM_PIPELINES = {
+   "torobche.pipelines.TorobchePipeline": 300,
+    "torobche.pipelines.RequestToApiPipeline": 500,
+}
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See https://docs.scrapy.org/en/latest/topics/autothrottle.html
 #AUTOTHROTTLE_ENABLED = True

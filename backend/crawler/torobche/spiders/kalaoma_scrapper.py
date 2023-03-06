@@ -5,7 +5,7 @@ class KalaomaSpider(BaseScrapper):
     name = "kalaoma-scrapper"
     shop_domain = "https://kalaoma.com/"
     base_url = "https://www.kalaoma.com/category-digital-device?PageNumber={page_number}"
-    allowed_domains = ["https://kalaoma.com/"]
+    allowed_domains = ["https://kalaoma.com/", "kalaoma.com"]
 
     def _get_cost(self, item):
         try:
@@ -24,3 +24,8 @@ class KalaomaSpider(BaseScrapper):
 
     def _get_items(self, response):
         return response.css(".km-theme-5")
+
+    def _extract_features(self, response, product):
+        keys = response.css('.products-attribute-title::text').extract()
+        values = response.css('.products-attribute-value::text').extract()
+        return {keys[i]: values[i] for i in range(len(keys))}

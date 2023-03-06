@@ -1,11 +1,12 @@
 from crawler.torobche.spiders.base_scrapper import BaseScrapper
 
 
+
 class MacbookiranSpider(BaseScrapper):
     name = "macbookiran-scrapper"
     shop_domain = "https://macbookiran.com/"
     base_url = "https://macbookiran.com/page/{page_number}/?s&post_type=product&cat_id"
-    allowed_domains = ["https://macbookiran.com/"]
+    allowed_domains = ["https://macbookiran.com/", "macbookiran.com"]
 
     def _get_cost(self, item):
         try:
@@ -24,3 +25,8 @@ class MacbookiranSpider(BaseScrapper):
 
     def _get_items(self, response):
         return response.css(".product-type-simple")
+
+    def _extract_features(self, response, product):
+        keys = response.css('.attribute_name::text').extract()
+        values = response.css('.attribute_value > p::text').extract()
+        return {keys[i].strip(): values[i].strip() for i in range(len(keys))} if len(keys) > 0 else dict()

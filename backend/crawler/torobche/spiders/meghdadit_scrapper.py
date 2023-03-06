@@ -6,7 +6,7 @@ class MeghdaditSpider(BaseScrapper):
     shop_domain = "https://meghdadit.com/"
     base_url = "https://meghdadit.com/productlist/" \
                "?cs=true&pt=0&s=&sb=CreateDate&im=true&page={page_number}"
-    allowed_domains = ["https://meghdadit.com/"]
+    allowed_domains = ["https://meghdadit.com/", "meghdadit.com"]
 
     def _get_cost(self, item):
         try:
@@ -25,3 +25,8 @@ class MeghdaditSpider(BaseScrapper):
 
     def _get_items(self, response):
         return response.css(".list-item-wrapper")
+
+    def _extract_features(self, response, product):
+        keys = response.css('.attribute-caption > span::text').extract()
+        values =  response.css('.attribute-value > span::text').extract()
+        return {keys[i].strip(): values[i].strip() for i in range(len(keys))} if len(keys) > 0 else dict()
