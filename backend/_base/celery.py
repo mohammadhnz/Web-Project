@@ -19,8 +19,8 @@ register_logger_signal(client)
 register_signal(client)
 
 app.conf.beat_schedule = {
-    'crawl all sites': {
-        'task': 'crawler.tasks.crawl_all_sites.crawl_all_sites',
-        'schedule': timedelta(seconds=30),
-    }
+    # 'crawl all sites': {
+    #     'task': 'crawler.tasks.crawl_all_sites.crawl_all_sites',
+    #     'schedule': timedelta(seconds=30),
+    # }
 }

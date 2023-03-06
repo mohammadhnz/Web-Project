@@ -3,6 +3,7 @@ import scrapy
 from crawler.torobche.spiders.base_scrapper import BaseScrapper
 
 
+
 class HiAppleSpider(BaseScrapper):
     name = "hiapple-scrapper"
     shop_domain = "hi.ir"
