@@ -39,7 +39,7 @@ class Shop(models.Model):
 
 class BaseProduct(models.Model):
     uid = models.CharField(primary_key=True, max_length=11, default=generate_uid, editable=False)
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=300, unique=True)
     category = models.ForeignKey(Category, on_delete=models.RESTRICT)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -50,7 +50,7 @@ class BaseProduct(models.Model):
 
 class Product(models.Model):
     uid = models.CharField(primary_key=True, max_length=11, default=generate_uid, editable=False)
-    name = models.CharField(unique=True, max_length=200, editable=False)
+    name = models.CharField(unique=True, max_length=300, editable=False)
     base_product = models.ForeignKey(BaseProduct, on_delete=models.RESTRICT)
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
     page_url = models.CharField(max_length=200)

@@ -12,7 +12,7 @@ class ProductCreateOrUpdateForm(forms.Form):
     page_url = forms.CharField(max_length=300, required=True)
     image_url = forms.CharField(max_length=300, required=True)
     shop_domain = forms.CharField(max_length=200, required=True)
-    name = forms.CharField(max_length=200, required=True)
+    name = forms.CharField(max_length=300, required=True)
     price = forms.IntegerField(required=True)
     is_available = forms.BooleanField(required=False, initial=False)
     features = forms.CharField(required=True)
@@ -21,6 +21,7 @@ class ProductCreateOrUpdateForm(forms.Form):
         data = self.cleaned_data
         return {'name': data.get('name'),
                 'page_url': data.get('page_url'),
+                'image_url': data.get('image_url'),
                 'features': json.loads(data.get('features')),
                 'shop': self.shop,
                 'base_product': self.base_product}
