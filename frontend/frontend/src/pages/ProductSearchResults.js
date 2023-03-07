@@ -3,26 +3,18 @@ import {styled, createTheme, ThemeProvider} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import MuiDrawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
-import MuiAppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
-import Link from '@mui/material/Link';
-import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import Header from "../components/Header";
-import ListSubheader from "@mui/material/ListSubheader";
 import FiltersListItem from "../components/FiltersListItems";
-import categories from "../static/productCategories.json"
 import products from "../static/products.json"
+import products2 from "../static/products2.json"
 import ProductList from "../components/product/ProductList";
+import {useEffect} from "react";
+import {useState} from "react";
 
 
 const drawerWidth = 240;
@@ -69,15 +61,39 @@ const mdTheme = createTheme({
     direction: 'rtl',
 });
 
+const productSampleData = {
+    product_url: "/product/detail/qAzwSx3Ed6Yh",
+    product_image_url: "",
+    shop_count: 3,
+    name: "موبایل آیفون xs max 64Gb",
+    price: " 12,000,000 تومان",
+    is_available: true,
+    updated: "12 دقیقه پیش"
+}
+
 export default function ProductSearchResults() {
     const [open, setOpen] = React.useState(true);
+    // const [productData, setProductData] = useState([]);
+    // TODO: uncomment above and remove below
+    const [productData, setProductData] = useState(products.products.data.items);
+    console.log("product data: ", productData)
     const toggleDrawer = () => {
         setOpen(!open);
     };
 
+    const getProductsSearchResult = () => {
+        // TODO: get api for search results
+    }
+
+    useEffect(() => {
+        getProductsSearchResult()
+    }, [])
+
+
     return (
         <div dir="rtl">
-            <Header title="تربچه" sections={sections} isInHome={false} data={products.products.data.items} isLogged={false}/>
+            <Header title="تربچه" sections={sections} isInHome={false} data={products.products.data.items}
+                    isLogged={false}/>
             <ThemeProvider theme={mdTheme}>
                 <Box sx={{display: 'flex'}}>
                     <CssBaseline/>
@@ -86,7 +102,6 @@ export default function ProductSearchResults() {
                             sx={{
                                 display: 'flex',
                                 alignItems: 'center',
-                                // justifyContent: 'flex-end',
                                 px: [1],
                             }}
                         >
@@ -98,7 +113,7 @@ export default function ProductSearchResults() {
                         <List sx={{width: '100%', maxWidth: 360, bgcolor: 'background.paper'}}
                               component="nav"
                               aria-labelledby="nested-list-subheader">
-                            <FiltersListItem/>
+                            <FiltersListItem productData={productData} setProductData={setProductData}/>
                         </List>
                     </Drawer>
                     <Box
@@ -114,17 +129,10 @@ export default function ProductSearchResults() {
                         }}
                     >
                         <Toolbar/>
-                        {/*<Container maxWidth="lg" sx={{mt: 4, mb: 4}}>*/}
-                        {/*    <Grid container spacing={1}>*/}
-                        {/*        /!* Recent Orders *!/*/}
-                        {/*        <Grid item xs={12}>*/}
-                                    <Box sx={{p: 2, display: 'flex', flexDirection: 'column'}}>
-                                        <ProductList/>
-                                    </Box>
-                        {/*        </Grid>*/}
-                        {/*    </Grid>*/}
 
-                        {/*</Container>*/}
+                        <Box sx={{p: 2, display: 'flex', flexDirection: 'column'}}>
+                            <ProductList productData={productData}/>
+                        </Box>
                     </Box>
                 </Box>
             </ThemeProvider>

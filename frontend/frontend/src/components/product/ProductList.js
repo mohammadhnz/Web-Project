@@ -15,11 +15,11 @@ import noImage from "../images/no-image.png";
 import {CardActionArea} from "@mui/material";
 
 
-const cards = products.products.data.items;
+// const cards = products.products.data.items;
 
 const theme = createTheme();
 
-export default function ProductList() {
+export default function ProductList({productData}) {
     const handleGoToPageProduct = () => {
 
     }
@@ -29,7 +29,7 @@ export default function ProductList() {
             {/*<main>*/}
             <Container sx={{py: 1}} maxWidth="md">
                 <Grid container spacing={2}>
-                    {cards.map((card) => (
+                    {productData.map((card) => (
                         <Grid item key={card} xs={12} sm={6} md={3}>
                             <Card
                                 sx={{height: '100%', display: 'flex', flexDirection: 'column'}}

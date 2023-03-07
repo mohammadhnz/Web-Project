@@ -6,11 +6,37 @@ import {Link as RouterLink} from 'react-router-dom';
 import Search from "../forms/Search";
 import logo from "./images/beet.png";
 import {MainButton} from "./MainButton";
-import {Image} from "antd";
-import Button from "@mui/material/Button";
+import axios from "axios";
+import CategoriesPopOver from "./category/CategoriesPopOver";
+import categories from '../static/categoriesWithChild.json'
+import {useEffect} from "react";
 
 function Header(props) {
-    const {sections, title, isInHome, data, isLogged} = props;
+
+    const getCategories = async () => {
+        try {
+            const response = await axios({
+                method: 'get',
+                url: 'https://lemon-weeks-do-31-56-209-97.loca.lt/suggest_origin_destination/?name=',
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    'Access-Control-Allow-Origin': '*',
+                    'Bypass-Tunnel-Reminder': 'hey'
+                },
+            })
+            console.log(response.data)
+        } catch
+            (err) {
+            console.log(err)
+        }
+    }
+    useEffect(() => {
+        getCategories()
+    }, [])
+
+
+    const {title, isInHome, data, isLogged} = props;
+    const sections = categories.categories;
     return (<div className=" rmdp-rtl">
         <React.Fragment>
             <Toolbar sx={{borderBottom: 1, borderColor: 'divider'}}>
@@ -43,24 +69,26 @@ function Header(props) {
                 variant="dense"
                 sx={{justifyContent: 'space-between', overflowX: 'auto'}}
             >
-                {sections.map((section) => (
-                    <Button
-                        style={{
-                            textDecoration: 'none',
-                            color: "#450115",
-                            '&:hover': {
-                                backgroundColor: '#ff0048',
-                                color: '#ff0048',
-                                cursor: 'pointer',
-                                textColor: '#ff0048',
-                                fontWeight: '20'
-                            },
-                        }}
-                    >
-                        {section.title}
-                    </Button>
-
-                ))}
+                {sections.map((section, index) => {
+                    // <Button
+                    //     style={{
+                    //         textDecoration: 'none',
+                    //         color: "#450115",
+                    //         '&:hover': {
+                    //             backgroundColor: '#ff0048',
+                    //             color: '#ff0048',
+                    //             cursor: 'pointer',
+                    //             textColor: '#ff0048',
+                    //             fontWeight: '20'
+                    //         },
+                    //     }}
+                    // >
+                    //     {section.title}
+                    // </Button>
+                    // console.log("in index: ", index, section);
+                    return <CategoriesPopOver data={section.children} name={section.name}/>
+                })
+                }
             </Toolbar>
         </React.Fragment>
     </div>);

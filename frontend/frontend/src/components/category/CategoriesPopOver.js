@@ -1,39 +1,64 @@
 import * as React from 'react';
-import Popover from '@mui/material/Popover';
-import Typography from '@mui/material/Typography';
-import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+import Popper from '@mui/material/Popper';
+import Fade from '@mui/material/Fade';
+import Button from "@mui/material/Button";
+import CategoriesInNav from "./CategoriesInNav";
+import {Link} from "react-router-dom";
 
-export default function CategoriesPopOver() {
-  const [anchorEl, setAnchorEl] = React.useState<HTMLButtonElement | null>(null);
+export default function CategoriesPopOver({data, name}) {
+    const [open, setOpen] = React.useState(false);
+    const [anchorEl, setAnchorEl] = React.useState(null);
 
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+        setOpen((previousOpen) => !previousOpen);
+    };
 
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+    const canBeOpen = open && Boolean(anchorEl);
+    const id = canBeOpen ? 'transition-popper' : undefined;
 
-  const open = Boolean(anchorEl);
-  const id = open ? 'simple-popover' : undefined;
-
-  return (
-    <div>
-      <Button aria-describedby={id} variant="contained" onClick={handleClick}>
-        Open Popover
-      </Button>
-      <Popover
-        id={id}
-        open={open}
-        anchorEl={anchorEl}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'left',
-        }}
-      >
-        <Typography sx={{ p: 2 }}>The content of the Popover.</Typography>
-      </Popover>
-    </div>
-  );
+    return (
+        <div>
+            <Button style={{
+                textDecoration: 'none',
+                color: "#450115",
+                '&:hover': {
+                    backgroundColor: '#ff0048',
+                    color: '#ff0048',
+                    cursor: 'pointer',
+                    textColor: '#ff0048',
+                    fontWeight: '20'
+                },
+            }} aria-describedby={id} type="button" onClick={handleClick}>
+                {name}
+            </Button>
+            <Popper id={id} open={open} anchorEl={anchorEl} transition >
+                {({TransitionProps}) => (
+                    <Fade {...TransitionProps} timeout={350}>
+                        <Box sx={{border: 1, borderRadius: 2, p: 1, bgcolor: 'background.paper', maxWidth: 600, overflowY: 'auto'}}>
+                            {data.map((d) => (
+                                <>
+                                    <Link
+                                        component={<Button/>}
+                                        style={{
+                                            textDecoration: 'none',
+                                            color: "#450115",
+                                            '&:hover': {
+                                                backgroundColor: '#ff0048',
+                                                color: '#ff0048',
+                                                cursor: 'pointer',
+                                                textColor: '#ff0048',
+                                                fontWeight: '20'
+                                            },
+                                        }}>{d.name}</Link>
+                                    <CategoriesInNav data={d.children}/>
+                                </>
+                            ))}
+                        </Box>
+                    </Fade>
+                )}
+            </Popper>
+        </div>
+    );
 }

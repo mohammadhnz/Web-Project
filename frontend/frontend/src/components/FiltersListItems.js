@@ -8,16 +8,22 @@ import List from "@mui/material/List";
 import {useState} from "react";
 import {Box, Checkbox, TextField} from "@mui/material";
 import categories from "../static/productCategories.json";
+import newProductsFilterTest from "../static/products2.json";
+
 import SearchInNav from "../forms/SearchInNav";
 import Grid from "@mui/material/Grid";
 import {MainButton} from "./MainButton";
 
 
-export default function FiltersListItem() {
+export default function FiltersListItem({productData, setProductData}) {
     const [openBrand, setOpenBrand] = useState(true);
     const [openCategory, setOpenCategory] = useState(true);
     const [openPrice, setOpenPrice] = useState(true);
     const [showAvailable, setShowAvailable] = useState(true);
+
+    const [fromPriceField, fromPriceSet] = useState(0)
+    const [toPriceField, toPriceSet] = useState(0)
+
     const categoriesNames = categories.categories;
     const handleClickBrand = () => {
         setOpenBrand(!openBrand);
@@ -28,6 +34,19 @@ export default function FiltersListItem() {
     const handleClickPrice = () => {
         setOpenPrice(!openPrice);
     };
+
+    const getProductsPriceFilterResult= () => {
+        // TODO: get api for search results
+        return newProductsFilterTest.products.data.items;
+    }
+
+    const handleSubmitPrice = (event) => {
+        event.preventDefault();
+        console.log(toPriceField)
+        console.log(fromPriceField)
+        const newProductList = getProductsPriceFilterResult()
+        setProductData(newProductList)
+    }
 
 
     const [checked, setChecked] = React.useState([0]);
@@ -51,7 +70,7 @@ export default function FiltersListItem() {
                 <ListItemIcon>
                     <BrandingWatermark/>
                 </ListItemIcon>
-                <ListItemText  primary="انتخاب برند"/>
+                <ListItemText primary="انتخاب برند"/>
                 {openBrand ? <ExpandLess/> : <ExpandMore/>}
             </ListItemButton>
             <Collapse in={openBrand} timeout="auto" unmountOnExit>
@@ -71,7 +90,8 @@ export default function FiltersListItem() {
                 <List component="div" disablePadding>
                     {categoriesNames.map((category) => (
                         <ListItemButton sx={{pl: 4}}>
-                            <ListItemText style={{display:'flex', justifyContent:'flex-startnp'}} primary={category.name}/>
+                            <ListItemText style={{display: 'flex', justifyContent: 'flex-startnp'}}
+                                          primary={category.name}/>
                         </ListItemButton>
                     ))}
                 </List>
@@ -86,26 +106,30 @@ export default function FiltersListItem() {
                 {openPrice ? <ExpandLess/> : <ExpandMore/>}
             </ListItemButton>
             <Collapse in={openPrice} timeout="auto" unmountOnExit>
-                <Grid container spacing={0.6}>
-                    <Grid item xs={5.5}>
-                        <TextField label="از" variant="outlined" size="small"/>
+                <form onSubmit={handleSubmitPrice}>
+                    <Grid container spacing={0.6}>
+                        <Grid item xs={5.5}>
+                            <TextField label="از" variant="outlined" size="small"
+                                       onChange={(e) => fromPriceSet(e.target.value)}/>
+                        </Grid>
+                        <Grid item xs={5.5}>
+                            <TextField label="تا" variant="outlined" size="small"
+                                       onChange={(e) => toPriceSet(e.target.value)}/>
+                        </Grid>
                     </Grid>
-                    <Grid item xs={5.5}>
-                        <TextField label="تا" variant="outlined" size="small"/>
-                    </Grid>
-                </Grid>
-                <Box
-                    m={2}
-                    //margin
-                    display="flex"
-                    justifyContent="center"
-                    alignItems="center"
-                    // sx={boxDefault}
-                >
-                    <MainButton variant="contained" color="primary" sx={{height: 40}}>
-                        اعمال فیلتر قیمت
-                    </MainButton>
-                </Box>
+                    <Box
+                        m={2}
+                        //margin
+                        display="flex"
+                        justifyContent="center"
+                        alignItems="center"
+                        // sx={boxDefault}
+                    >
+                        <MainButton type="submit" variant="contained" color="primary" sx={{height: 40}}>
+                            اعمال فیلتر قیمت
+                        </MainButton>
+                    </Box>
+                </form>
             </Collapse>
 
 
