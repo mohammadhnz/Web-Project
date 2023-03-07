@@ -56,7 +56,6 @@ class CreateOrUpdate(BaseFormView):
         data = form.cleaned_data
         form.shop = get_object_or_404(Shop, domain=data.get('shop_domain'))
         form.category_id = suggest_category(data.get('name'), json.loads(data.get('features')))
-        print("result category::   ", form.category_id)
         form.base_product = get_or_select_base_product(data.get('name'),
                                                        form.category_id,
                                                        json.loads(data.get('features')),

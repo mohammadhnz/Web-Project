@@ -4,8 +4,8 @@ from .utils import generate_uid
 
 
 class Category(models.Model):
-    id = models.IntegerField(primary_key=True)
-    name = models.CharField(max_length=50)
+    id = models.AutoField(primary_key=True)
+    name = models.CharField(max_length=100)
     parent = models.ForeignKey('self', blank=True, null=True, on_delete=models.RESTRICT)
     is_leaf = models.BooleanField()
     related_words = HStoreField(null=True, blank=True)
@@ -27,9 +27,9 @@ class Category(models.Model):
 
 class Shop(models.Model):
     uid = models.CharField(primary_key=True, max_length=11, default=generate_uid, editable=False)
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=100, unique=True)
     city = models.CharField(max_length=50)
-    domain = models.CharField(max_length=50, unique=True)
+    domain = models.CharField(max_length=200, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -39,7 +39,7 @@ class Shop(models.Model):
 
 class BaseProduct(models.Model):
     uid = models.CharField(primary_key=True, max_length=11, default=generate_uid, editable=False)
-    name = models.CharField(max_length=50, unique=True)
+    name = models.CharField(max_length=300, unique=True)
     category = models.ForeignKey(Category, on_delete=models.RESTRICT)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -50,11 +50,11 @@ class BaseProduct(models.Model):
 
 class Product(models.Model):
     uid = models.CharField(primary_key=True, max_length=11, default=generate_uid, editable=False)
-    name = models.CharField(unique=True, max_length=200, editable=False)
+    name = models.CharField(unique=True, max_length=300, editable=False)
     base_product = models.ForeignKey(BaseProduct, on_delete=models.RESTRICT)
     shop = models.ForeignKey(Shop, on_delete=models.CASCADE)
-    page_url = models.CharField(max_length=200)
-    image_url = models.CharField(max_length=300)
+    page_url = models.CharField(max_length=500)
+    image_url = models.CharField(max_length=500)
     features = HStoreField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

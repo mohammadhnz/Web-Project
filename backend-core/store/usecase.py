@@ -11,7 +11,8 @@ def find_phrase_score(phr, name: str, features: dict):
         score += 10
 
     for key in features:
-        if features.get(key).find(phr) != -1:
+        if key != 'general_features' and key in features and features.get(key) is not None and features.get(key).find(
+                phr) != -1:
             score += 3
     return score
 
@@ -26,7 +27,7 @@ def calculate_score(category, name: str, features: dict):
 
 
 def suggest_category(name: str, features: dict):
-    categories = Category.objects.all()
+    categories = Category.objects.filter(is_leaf=True)
 
     max_score, best_id = None, None
     for category in categories:
@@ -49,6 +50,9 @@ def suggest_base_product(name: str, features: dict, category_id, price):
 
 
 def get_or_select_base_product(name: str, category_id, features: dict, price):
+    x = [t for t in BaseProduct.objects.filter(name=name)]
+    if len(x) > 0:
+        return x[0]
     print(name, category_id, price)
     products = run_query(name, category_id, price * 1.3, price * 0.7)
     if len(products) > 0:

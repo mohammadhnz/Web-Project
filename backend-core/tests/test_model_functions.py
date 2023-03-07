@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from store.models import Product, ProductHistory, Category, Shop
+from store.models import Product, ProductHistory, Category, Shop, BaseProduct
 
 from tests.data import TestData
 
@@ -10,8 +10,12 @@ class ModelsTestCase(TestCase):
         # given
         TestData.create_categories()
         TestData.create_shops()
+
+        base = BaseProduct.objects.create(name="redmi-book 15",
+                                          category=Category.objects.get(name='لپتاپ شیائومی'))
+
         product = Product.objects.create(name="redmi-book 15",
-                                         category=Category.objects.get(name='لپتاپ شیائومی'),
+                                         base_product=base,
                                          shop=Shop.objects.get(name="دیجیکالا"))
         ProductHistory.objects.create(product=product, price=1000, is_available=True)
         product_history2 = ProductHistory.objects.create(product=product, price=2000, is_available=False)
@@ -26,8 +30,12 @@ class ModelsTestCase(TestCase):
         # given
         TestData.create_categories()
         TestData.create_shops()
+
+        base = BaseProduct.objects.create(name="redmi-book 15",
+                                          category=Category.objects.get(name='لپتاپ شیائومی'))
+
         product = Product.objects.create(name="redmi-book 15",
-                                         category=Category.objects.get(name='لپتاپ شیائومی'),
+                                         base_product=base,
                                          shop=Shop.objects.get(name="دیجیکالا"))
         product_history1 = ProductHistory.objects.create(product=product, price=1000, is_available=True)
         product_history2 = ProductHistory.objects.create(product=product, price=2000, is_available=False)
