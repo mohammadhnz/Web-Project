@@ -1,11 +1,11 @@
 import json
+from dataclasses import dataclass, asdict
+from datetime import datetime
+from typing import List, Optional, Dict
 
 from django import forms
-from dataclasses import dataclass, asdict
-from typing import List, Optional, Dict
-from datetime import datetime
 
-from .models import ProductHistory, Category, Product, BaseProduct
+from store.models import ProductHistory, Category, Product, BaseProduct
 
 
 class ProductCreateOrUpdateForm(forms.Form):

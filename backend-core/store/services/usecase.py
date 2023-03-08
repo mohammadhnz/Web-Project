@@ -1,7 +1,7 @@
 from elasticsearch_dsl import Q
 
-from store.documents import ProductDocument
-from store.dtos import ProductListQuery
+from store.services.documents import ProductDocument
+from store.serializers.dtos import ProductListQuery
 from store.models import Category, BaseProduct
 
 

@@ -12,11 +12,8 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 
 from pathlib import Path
 
-import environ
+from decouple import config
 
-# Initialise environment variables
-env = environ.Env()
-environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -25,7 +22,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -43,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.postgres',
     'django_elasticsearch_dsl',
+    'core',
     'store',
 ]
 
@@ -58,11 +56,13 @@ MIDDLEWARE = [
 
 ELASTICSEARCH_DSL = {
     'default': {
-        'hosts': env('ELASTIC_HOST')
+        'hosts': config('ELASTIC_HOST')
     },
 }
 
 ROOT_URLCONF = 'project1.urls'
+
+AUTH_USER_MODEL = 'core.BaseAccount'
 
 TEMPLATES = [
     {
@@ -88,10 +88,10 @@ WSGI_APPLICATION = 'project1.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': env('DATABASE_NAME'),
-        'USER': env('DATABASE_USER'),
-        'PASSWORD': env('DATABASE_PASS'),
-        'HOST': env('DATABASE_HOST'),
+        'NAME': config('DATABASE_NAME'),
+        'USER': config('DATABASE_USER'),
+        'PASSWORD': config('DATABASE_PASS'),
+        'HOST': config('DATABASE_HOST'),
         'PORT': '5432',
     }
 }

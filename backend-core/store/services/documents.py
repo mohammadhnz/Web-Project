@@ -1,8 +1,8 @@
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
 
-from .dtos import ProductListQuery, FeatureDTO
-from .models import Product, ProductHistory, Category, BaseProduct
+from store.serializers.dtos import ProductListQuery, FeatureDTO
+from store.models import Product, ProductHistory, Category, BaseProduct
 
 
 @registry.register_document
