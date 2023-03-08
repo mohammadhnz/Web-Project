@@ -15,6 +15,8 @@ import products2 from "../static/products2.json"
 import ProductList from "../components/product/ProductList";
 import {useEffect} from "react";
 import {useState} from "react";
+import Typography from "@mui/material/Typography";
+import ProductFilterSelect from "../components/product/ProductFilterSelect";
 
 
 const drawerWidth = 240;
@@ -71,12 +73,15 @@ const productSampleData = {
     updated: "12 دقیقه پیش"
 }
 
+const filterSelectItems = ["جدیدترین", "ارزان ترین", "گران ترین"]
+
 export default function ProductSearchResults() {
     const [open, setOpen] = React.useState(true);
     // const [productData, setProductData] = useState([]);
     // TODO: uncomment above and remove below
     const [productData, setProductData] = useState(products.products.data.items);
-    console.log("product data: ", productData)
+    const [field, setField] = useState('');
+
     const toggleDrawer = () => {
         setOpen(!open);
     };
@@ -117,6 +122,7 @@ export default function ProductSearchResults() {
                         </List>
                     </Drawer>
                     <Box
+                        dir="rtl"
                         component="main"
                         sx={{
                             backgroundColor: (theme) =>
@@ -129,7 +135,8 @@ export default function ProductSearchResults() {
                         }}
                     >
                         <Toolbar/>
-
+                        <ProductFilterSelect setProductData={setProductData} field={field} setField={setField} fieldItems={filterSelectItems}/>
+                        <Divider/>
                         <Box sx={{p: 2, display: 'flex', flexDirection: 'column'}}>
                             <ProductList productData={productData}/>
                         </Box>

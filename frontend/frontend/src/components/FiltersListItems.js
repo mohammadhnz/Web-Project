@@ -3,14 +3,13 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Collapse from '@mui/material/Collapse';
-import {AttachMoney, BrandingWatermark, Category, ExpandLess, ExpandMore, Money, StarBorder} from "@material-ui/icons";
+import {AttachMoney, Category, ExpandLess, ExpandMore} from "@material-ui/icons";
 import List from "@mui/material/List";
 import {useState} from "react";
 import {Box, Checkbox, TextField} from "@mui/material";
 import categories from "../static/productCategories.json";
 import newProductsFilterTest from "../static/products2.json";
-
-import SearchInNav from "../forms/SearchInNav";
+import allProducts from "../static/products.json";
 import Grid from "@mui/material/Grid";
 import {MainButton} from "./MainButton";
 
@@ -35,9 +34,19 @@ export default function FiltersListItem({productData, setProductData}) {
         setOpenPrice(!openPrice);
     };
 
-    const getProductsPriceFilterResult= () => {
+    const getProductsPriceFilterResult = () => {
         // TODO: get api for search results
         return newProductsFilterTest.products.data.items;
+    }
+
+    const getProductAvailable = () => {
+        // TODO: get api for search results
+        return newProductsFilterTest.products.data.items;
+    }
+
+    const getAllProducts = () => {
+        // TODO: get api for search results
+        return allProducts.products.data.items;
     }
 
     const handleSubmitPrice = (event) => {
@@ -48,36 +57,31 @@ export default function FiltersListItem({productData, setProductData}) {
         setProductData(newProductList)
     }
 
-
-    const [checked, setChecked] = React.useState([0]);
-
-    const handleToggle = (value) => () => {
-        const currentIndex = checked.indexOf(value);
-        const newChecked = [...checked];
-
-        if (currentIndex === -1) {
-            newChecked.push(value);
+    const handleShowAvailable = (event) => {
+        if (showAvailable) {
+            setProductData(getProductAvailable())
+            setShowAvailable((prevState => !prevState))
         } else {
-            newChecked.splice(currentIndex, 1);
+            setProductData(getAllProducts())
+            setShowAvailable((prevState => !prevState))
         }
+    }
 
-        setChecked(newChecked);
-    };
     return (
         <>
 
-            <ListItemButton onClick={handleClickBrand}>
-                <ListItemIcon>
-                    <BrandingWatermark/>
-                </ListItemIcon>
-                <ListItemText primary="انتخاب برند"/>
-                {openBrand ? <ExpandLess/> : <ExpandMore/>}
-            </ListItemButton>
-            <Collapse in={openBrand} timeout="auto" unmountOnExit>
-                <List component="div" disablePadding>
-                    <SearchInNav/>
-                </List>
-            </Collapse>
+            {/*<ListItemButton onClick={handleClickBrand}>*/}
+            {/*    <ListItemIcon>*/}
+            {/*        <BrandingWatermark/>*/}
+            {/*    </ListItemIcon>*/}
+            {/*    <ListItemText primary="انتخاب برند"/>*/}
+            {/*    {openBrand ? <ExpandLess/> : <ExpandMore/>}*/}
+            {/*</ListItemButton>*/}
+            {/*<Collapse in={openBrand} timeout="auto" unmountOnExit>*/}
+            {/*    <List component="div" disablePadding>*/}
+            {/*        <SearchInNav/>*/}
+            {/*    </List>*/}
+            {/*</Collapse>*/}
 
             <ListItemButton onClick={handleClickCategory}>
                 <ListItemIcon>
@@ -133,12 +137,12 @@ export default function FiltersListItem({productData, setProductData}) {
             </Collapse>
 
 
-            <ListItemButton onClick={handleToggle(0)}>
+            <ListItemButton>
                 <ListItemIcon>
                     <Checkbox
-                        edge="start"
-                        checked={checked.indexOf(0) !== -1}
-                        tabIndex={-1}
+                        checked={showAvailable}
+                        onChange={handleShowAvailable}
+                        inputProps={{'aria-label': 'controlled'}}
                         disableRipple
                     />
                 </ListItemIcon>
