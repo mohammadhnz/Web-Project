@@ -30,7 +30,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 # Application definition
-
+BASE_URL = 'https://2525-31-56-237-194.eu.ngrok.io/'
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -58,20 +58,20 @@ MIDDLEWARE = [
 
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = [
-    'https://e02f-31-56-237-194.eu.ngrok.io',
+    'https://2525-31-56-237-194.eu.ngrok.io',
     'http://0.0.0.0:8080',
     'http://localhost:3000'
 ]
 
 CSRF_TRUSTED_ORIGINS = [
-    'https://e02f-31-56-237-194.eu.ngrok.io',
+    'https://2525-31-56-237-194.eu.ngrok.io',
     'http://0.0.0.0:8080',
     'http://localhost:3000'
 
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    'https://e02f-31-56-237-194.eu.ngrok.io',
+    'https://2525-31-56-237-194.eu.ngrok.io',
     'http://0.0.0.0:8080',
     'http://localhost:3000'
 ]

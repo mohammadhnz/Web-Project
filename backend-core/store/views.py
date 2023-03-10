@@ -1,6 +1,7 @@
 import json
 from collections import defaultdict
 
+from django.conf import settings
 from django.http import HttpResponseBadRequest
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -54,6 +55,7 @@ class CreateOrUpdate(BaseFormView):
         data = form.cleaned_data
         form.shop = Shop.objects.filter(domain=data.get('shop_domain')).first()
         if form.shop is None:
+            print("WHAT THE FUCK?   ",data.get('shop_domain'))
             return HttpResponseBadRequest()
         form.shop = get_object_or_404(Shop, domain=data.get('shop_domain'))
         form.category_id = suggest_category(data.get('name'), json.loads(data.get('features')))
@@ -63,7 +65,7 @@ class CreateOrUpdate(BaseFormView):
                                                        data.get('price'))
         form.product, _ = Product.objects.update_or_create(name=data.get('name'), defaults=form.product_fields())
         ProductHistory.objects.create(**form.product_history_fields())
-        ProductDocument().update(form.base_product)
+        # ProductDocument().update(form.base_product)
         return JsonResponse({"uid": form.product.uid})
 
     def form_invalid(self, form):
@@ -72,8 +74,8 @@ class CreateOrUpdate(BaseFormView):
 
 class Redirect(RedirectView):
     def get_redirect_url(self):
-        shop = get_object_or_404(Product, uid=self.request.GET.get('uid', None)).shop
-        return 'https://{}'.format(shop.domain)
+        product = get_object_or_404(Product, uid=self.request.GET.get('uid', None))
+        return product.page_url
 
 
 class CategoryList(ListView):
@@ -92,7 +94,7 @@ class NestedCategoriesListView(ListView):
         parents_map = defaultdict(set)
         categories_data = {c.id: CategoryItemDTO(c).dict() for c in all_categories}
         for category_id, category in categories_data.items():
-            category['link'] = f"/product/list?category_id={category_id}"
+            category['link'] = settings.BASE_URL + f"/product/list?category_id={category_id}"
         for category in all_categories:
             parents_map[category.parent_id].add(category.id)
 
@@ -125,6 +127,7 @@ class ProductList(ListView):
         return ProductDocument.create_query(ProductListQuery(self.request.GET)).execute()
 
     def get_items(self, context):
+        print(self.request.GET)
         return [ProductListItemDTO(x).dict() for x in context['object_list']]
 
 

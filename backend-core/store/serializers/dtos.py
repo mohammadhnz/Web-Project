@@ -4,6 +4,7 @@ from datetime import datetime
 from typing import List, Optional, Dict
 
 from django import forms
+from django.conf import settings
 
 from store.models import ProductHistory, Category, Product, BaseProduct
 
@@ -99,7 +100,7 @@ class ProductShopDTO(DataClass):
 
     def __init__(self, product: Product):
         self.uid = product.uid
-        self.redirect_url = '/product/redirect/?uid={}'.format(product.uid)
+        self.redirect_url = settings.BASE_URL + '/product/redirect?uid={}'.format(product.uid)
         self.shop_name = product.shop.name
         self.name = product.name
         self.city = product.shop.city
@@ -144,10 +145,10 @@ class ProductDetailItemDTO(DataClass):
         last_history = ProductHistory.get_last_history(product)
 
         self.uid = base_product.uid
-        self.product_price_list_url = '/product/price-change/list/?uid={}'.format(base_product.uid)
+        self.product_price_list_url = settings.BASE_URL + '/product/price-change/list/?uid={}'.format(base_product.uid)
         self.product_image_url = product.image_url
         self.shops = sorted([ProductShopDTO(product) for product in available_products], key=lambda x: x.price)
-        self.best_redirect_url = '/product/redirect/?uid={}'.format(product.uid)
+        self.best_redirect_url = settings.BASE_URL + '/product/redirect?uid={}'.format(product.uid)
 
         self.name = base_product.name
         self.price = last_history.price
@@ -168,7 +169,7 @@ class ProductListItemDTO(DataClass):
     category_id: int
 
     def __init__(self, product):
-        self.product_url = '/product/detail/{}'.format(product.uid)
+        self.product_url = settings.BASE_URL + '/product/detail/{}'.format(product.uid)
         self.product_image_url = product.image_url
         self.shop_count = product.shop_count
         self.name = product.name
