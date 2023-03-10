@@ -101,7 +101,9 @@ class ProductShopDTO(DataClass):
         self.redirect_url = '/product/redirect/?uid={}'.format(product.uid)
         self.name = product.shop.name
         self.city = product.shop.city
-        self.price = ProductHistory.get_last_history_for_shop(product)
+        history = ProductHistory.get_last_history(product)
+        self.price = history.price
+        self.is_available = history.is_available
 
 
 @dataclass
