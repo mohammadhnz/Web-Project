@@ -159,6 +159,7 @@ class ProductListItemDTO(DataClass):
     price: str
     is_available: bool
     updated: str
+    category_id: int
 
     def __init__(self, product):
         self.product_url = '/product/detail/{}'.format(product.uid)
@@ -168,12 +169,14 @@ class ProductListItemDTO(DataClass):
         self.price = product.last_history.min_price
         self.is_available = product.last_history.is_available
         self.updated = product.last_history.created_at
+        self.category_id = product.categories[0]['id']
 
 
 @dataclass
 class ProductListQuery(DataClass):
     filters: List[tuple]
     sort: dict
+    category_id: int
 
     def __init__(self, query):
         self.filters = []
@@ -191,8 +194,7 @@ class ProductListQuery(DataClass):
         if is_available is not None:
             self.filters.append(('term', {'last_history__is_available': is_available}))
         category_id = query.get('category_id', None)
-        if category_id is not None:
-            self.filters.append(('term', {'categories__id': category_id}))
+        self.category_id = int(category_id) if category_id else None
 
         sort = query.get('sort', 'date_updated-')
         if sort.startswith('date_updated'):

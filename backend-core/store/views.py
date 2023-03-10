@@ -8,10 +8,11 @@ from django.views.generic.base import RedirectView
 from django.views.generic.edit import BaseFormView
 from django.views.generic.list import BaseListView
 
-from store.services.documents import ProductDocument
-from store.serializers.dtos import ProductCreateOrUpdateForm, ProductPriceChangeListDTO, CategoryItemDTO, ProductListItemDTO, \
-    ProductListQuery
 from store.models import ProductHistory, Category, Product, Shop
+from store.serializers.dtos import ProductCreateOrUpdateForm, ProductPriceChangeListDTO, CategoryItemDTO, \
+    ProductListItemDTO, \
+    ProductListQuery
+from store.services.documents import ProductDocument
 from store.services.usecase import suggest_category, get_or_select_base_product
 from store.services.utils import replace_query
 
@@ -91,6 +92,8 @@ class NestedCategoriesListView(ListView):
         all_categories = Category.objects.all()
         parents_map = defaultdict(set)
         categories_data = {c.id: CategoryItemDTO(c).dict() for c in all_categories}
+        for category_id, category in categories_data.items():
+            category['link'] = f"/product/list?category_id={category_id}"
         for category in all_categories:
             parents_map[category.parent_id].add(category.id)
 
