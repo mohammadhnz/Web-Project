@@ -1,5 +1,6 @@
 from django_elasticsearch_dsl import Document, fields
 from django_elasticsearch_dsl.registries import registry
+from elasticsearch_dsl import Q
 
 from store.serializers.dtos import ProductListQuery, FeatureDTO
 from store.models import Product, ProductHistory, Category, BaseProduct
@@ -69,6 +70,12 @@ class ProductDocument(Document):
         search = ProductDocument().search()
         for f in query.filters:
             search = search.filter(f[0], **f[1])
+        if query.category_id:
+            search = search.query(
+                'nested',
+                path='categories',
+                query=Q('term', categories__id=query.category_id)
+            )
         if search.sort is None:
             return search
         return search.sort(query.sort)
