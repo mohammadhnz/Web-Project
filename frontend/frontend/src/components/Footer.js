@@ -26,6 +26,10 @@ export default function StickyFooter() {
                 marginTop: 'auto',
                 textAlign: 'center',
                 marginBottom: '0',
+                position: 'absolute',
+                left: 0,
+                bottom: 0,
+                right: 0
             }}
         >
             <CssBaseline/>

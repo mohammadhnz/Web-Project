@@ -17,6 +17,9 @@ import ProductList from "../components/product/ProductList";
 import Typography from "@mui/material/Typography";
 import ProductShopsList from "../components/product/ProductShopsList";
 import Divider from "@mui/material/Divider";
+import axios from "axios";
+import {useState} from "react";
+import {useEffect} from "react";
 
 const drawerWidth = 240;
 
@@ -38,28 +41,21 @@ const mdTheme = createTheme();
 
 export default function ProductPage() {
     const location = useLocation()
-    const {product_id} = location.state
+    const {product, isLogged} = location.state
+    console.log("in detail page", product)
 
-    const getProductData = (product_id) => {
-        // TODO: get real product data
-        const data = products.products.data.items;
-        const product = data.find(({id}) => id === product_id);
-        console.log(product)
-        return product;
-    }
 
     const getSimilarProducts = () => {
         // TODO: get similar products for real
         return sampleProducts.products.data.items
     }
 
-    const product_data = getProductData(product_id);
     const similar_product_data = getSimilarProducts()
 
     return (
         <div dir="rtl">
-            <Header title="تربچه" sections={sections} isInHome={false} isLogged={false}
-                    data={products.products.data.items}/>
+            <Header title="تربچه" sections={sections} isInHome={false} isLogged={isLogged}
+                    autoCompeleteData={products.products.data.items}/>
             <ThemeProvider theme={mdTheme}>
                 <Box sx={{display: 'flex'}}>
                     <CssBaseline/>
@@ -88,7 +84,7 @@ export default function ProductPage() {
                                             height: 240,
                                         }}
                                     >
-                                        <ProductDetail data={product_data}/>
+                                        <ProductDetail data={product}/>
                                     </Paper>
                                 </Grid>
                                 {/* Recent Deposits */}
@@ -117,7 +113,7 @@ export default function ProductPage() {
                                         <Typography variant="h6" sx={{
                                             fontWeight: 'bold',
                                         }}>فروشنده ها</Typography>
-                                        <ProductShopsList/>
+                                        <ProductShopsList shops={product.shops}/>
                                     </Paper>
                                 </Grid>
                                 {/* Recent Deposits */}
@@ -132,7 +128,7 @@ export default function ProductPage() {
                                     >
                                         <Typography variant="h6" sx={{
                                             fontWeight: 'bold',
-                                        }}> مشخصات {product_data.name}</Typography>
+                                        }}> مشخصات {product.name}</Typography>
                                         <Typography variant="subtitle2" sx={{marginTop: 5}}>مشخصات کلی</Typography>
                                         <Divider/>
                                     </Paper>

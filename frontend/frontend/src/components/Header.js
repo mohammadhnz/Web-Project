@@ -9,26 +9,25 @@ import {MainButton} from "./MainButton";
 import axios from "axios";
 import CategoriesPopOver from "./category/CategoriesPopOver";
 import categories from '../static/categoriesWithChild.json'
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 
 function Header(props) {
 
-    const getCategories = async () => {
-        try {
-            const response = await axios({
-                method: 'get',
-                url: 'https://lemon-weeks-do-31-56-209-97.loca.lt/suggest_origin_destination/?name=',
-                headers: {
-                    'Content-Type': 'application/json;charset=UTF-8',
-                    'Access-Control-Allow-Origin': '*',
-                    'Bypass-Tunnel-Reminder': 'hey'
-                },
-            })
-            console.log(response.data)
-        } catch
-            (err) {
-            console.log(err)
-        }
+
+    const getCategories = () => {
+        axios({
+            method: 'get',
+            url: 'https://2525-31-56-237-194.eu.ngrok.io/nested_categories/list',
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+                'Access-Control-Allow-Origin': '*'
+            },
+        }).then(function (response) {
+            console.log(response);
+            setSections(response.data.items)
+        }).catch(function (error) {
+            console.log(error);
+        });
     }
 
     useEffect(() => {
@@ -36,16 +35,17 @@ function Header(props) {
     }, [])
 
 
-    const {title, isInHome, data, isLogged} = props;
-    const sections = categories.categories;
+    const {title, isHome, autoCompeleteData, isLogged, setProductData} = props;
+    const [sections, setSections] = useState(categories.categories)
+
     const navigate = useNavigate();
 
     return (
         <div className=" rmdp-rtl">
             <React.Fragment>
                 <Toolbar sx={{borderBottom: 1, borderColor: 'divider'}}>
-                    {!isInHome && (
-                        <Search data={data}/>)}
+                    {!isHome && (
+                        <Search data={autoCompeleteData} setProductData={setProductData} isHome={false}/>)}
                     <span className="material-icons">
                     <RouterLink to="/">
                         <img src={logo} alt='logo' width="60"/>
@@ -66,16 +66,17 @@ function Header(props) {
                             ثبت نام/ورود
                         </MainButton>)}
                     {isLogged && (<MainButton variant="contained" size="small">
-                        93571828
+                        {isLogged}
                     </MainButton>)}
                 </Toolbar>
                 <Toolbar
                     component="nav"
                     variant="dense"
-                    sx={{justifyContent: 'space-between', overflowX: 'auto', }}
+                    sx={{justifyContent: 'space-between', overflowX: 'auto',}}
                 >
                     {sections.map((section, index) => {
-                        return <CategoriesPopOver data={section.children} name={section.name}/>
+                        return <CategoriesPopOver data={section.children} name={section.name} isHome={isHome}
+                                                  setProductData={setProductData}/>
                     })
                     }
                 </Toolbar>

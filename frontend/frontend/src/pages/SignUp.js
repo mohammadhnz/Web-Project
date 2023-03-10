@@ -71,7 +71,6 @@ export default function SignUp() {
             password_confirm: data.get('password_confirm'),
             gender: "male",
             account_type: "seller"
-
         }
         console.log("post data: ", d)
         // instance.put('/core/register/', d).then((res) => {
@@ -117,7 +116,7 @@ export default function SignUp() {
 
         axios({
             method: 'post',
-            url: 'http://0.0.0.0:8080/core/register/',
+            url: 'https://e02f-31-56-237-194.eu.ngrok.io/core/register/',
             data: d,
             headers: {
                 'Content-Type': 'application/json;charset=UTF-8',
@@ -125,10 +124,13 @@ export default function SignUp() {
             },
         }).then(function (response) {
             console.log(response);
+            const userEmail = response.data.email;
+            console.log(userEmail)
+            navigate("/", {state: userEmail})
         }).catch(function (error) {
+            alert("please try again!")
             console.log(error);
         });
-        // navigate("/");
     };
 
     const handleEmailChange = (e) => {

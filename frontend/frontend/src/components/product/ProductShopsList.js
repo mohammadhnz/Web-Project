@@ -6,11 +6,11 @@ import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
 import Typography from "@mui/material/Typography";
 
-export default function ProductShopsList() {
-    const cards = shops.shops;
+export default function ProductShopsList({shops}) {
+    // const cards = shops.shops;
     return (
         <div>
-            {cards.map((card) => (
+            {shops.map((card) => (
                 <>
                     <ShopItemList data={card}/>
                     <Divider/>

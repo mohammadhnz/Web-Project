@@ -2,33 +2,33 @@
   "categories": [
     {
       "name": "موبایل و کالای دیجیتال",
-      "link": "cat-link1",
+      "id": "cat-link1",
       "children": [
         {
           "name": "موبایل",
-          "link": "cat-link2",
+          "id": "cat-link2",
           "children": [
             {
               "name": "اندروید خوب",
-              "link": "cat-link3"
+              "id": "https://mui.com/material-ui/api/popper/"
             },
             {
               "name": "اپل خوب",
-              "link": "cat-link4"
+              "id": "cat-link4"
             }
           ]
         },
         {
           "name": "دیجیتال",
-          "link": "cat-link2",
+          "id": "cat-link2",
           "children": [
             {
               "name": "برقیه یوهاها",
-              "link": "cat-link6"
+              "id": "cat-link6"
             },
             {
               "name": "هه هه",
-              "link": "cat-link5"
+              "id": "cat-link5"
             }
           ]
         }
@@ -36,19 +36,19 @@
     },
     {
       "name": "لپتاپ، کامپیوتر، اداری",
-      "link": "cat-link5",
+      "id": "cat-link5",
       "children": [
         {
           "name": "لپتاپ",
-          "link": "cat-link6",
+          "id": "cat-link6",
           "children": [
             {
               "name": "لپتاپ خوب",
-              "link": "cat-link7"
+              "id": "cat-link7"
             },
             {
               "name": "لپتاپ مفت",
-              "link": "cat-link8"
+              "id": "cat-link8"
             }
           ]
         }
@@ -56,19 +56,19 @@
     },
     {
       "name": "هایپر مارکت",
-      "link": "cat-link9",
+      "id": "cat-link9",
       "children": [
         {
           "name": "cat-name",
-          "link": "cat-link10",
+          "id": "cat-link10",
           "children": [
             {
               "name": "cat-name",
-              "link": "cat-link11"
+              "id": "cat-link11"
             },
             {
               "name": "cat-name",
-              "link": "cat-link12"
+              "id": "cat-link12"
             }
           ]
         }
@@ -76,19 +76,19 @@
     },
     {
       "name": "لوازم خانگی",
-      "link": "cat-link13",
+      "id": "cat-link13",
       "children": [
         {
           "name": "cat-name",
-          "link": "cat-link14",
+          "id": "cat-link14",
           "children": [
             {
               "name": "cat-name",
-              "link": "cat-link15"
+              "id": "cat-link15"
             },
             {
               "name": "cat-name",
-              "link": "cat-link16"
+              "id": "cat-link16"
             }
           ]
         }

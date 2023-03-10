@@ -9,6 +9,7 @@ import {FlagOutlined} from "@ant-design/icons";
 import React from "react";
 import Button from '@mui/material/Button';
 import {createTheme} from "@mui/material/styles";
+import {Link as RouterLink, useNavigate} from 'react-router-dom';
 
 export default function ShopItemList({data}) {
     return (
@@ -33,7 +34,7 @@ export default function ShopItemList({data}) {
                                     marginLeft: "6px",
                                     fontSize: "14px",
                                     color: "white",
-                                }} variant="contained">{JSON.stringify(data.year)} سال در تربچه</Button>
+                                }} variant="contained"> سال در تربچه</Button>
                                 <Button style={{
                                     borderRadius: 25,
                                     backgroundColor: "#d9d9d9",
@@ -45,19 +46,22 @@ export default function ShopItemList({data}) {
                                     گزارش مشکل
                                 </Button>
                             </Grid>
-                            <Typography>{data.product_name}</Typography>
-                            <Typography variant="subtitle2" color="grey">{data.description}</Typography>
+                            <Typography>{data.shop_name}</Typography>
+                            {/*<Typography variant="subtitle2" color="grey">{data.description}</Typography>*/}
+                            <Typography variant="subtitle2" color="grey"></Typography>
                         </Grid>
                     </Grid>
 
 
-                    <Grid dir="ltr" item xs={6} md={6} lg={6} >
+                    <Grid dir="ltr" item xs={6} md={6} lg={6}>
                         <Grid direction="column" marginBottom={5} container columns={{xs: 3, md: 8}}>
                             <Grid container marginBottom={2} columns={{xs: 4, md: 12}}>
 
                             </Grid>
-                            <Typography dir="rtl" textAlign="left" color="#ba0438">  {JSON.stringify(data.product_price)} تومان </Typography>
-                            <Button style={{
+                            <Typography dir="rtl" textAlign="left"
+                                        color="#ba0438">  {JSON.stringify(data.price)} تومان </Typography>
+                            <RouterLink style={{
+
                                 borderRadius: 5,
                                 borderColor: "#ba0438",
                                 fontSize: "14px",
@@ -68,8 +72,9 @@ export default function ShopItemList({data}) {
                                 '&:hover': {
                                     backgroundColor: '#450115',
                                 },
-                            }} variant="outlined">خرید</Button>
-                            <Typography variant="subtitle1" color="grey">{data.lastModified} :آخرین تغییر قیمت </Typography>
+                            }} component={<MainButton/>} to={data.redirect_url} variant="outlined">خرید</RouterLink>
+                            <Typography variant="subtitle1" color="grey">{data.updated} :آخرین تغییر
+                                قیمت </Typography>
                         </Grid>
                     </Grid>
                 </Grid>

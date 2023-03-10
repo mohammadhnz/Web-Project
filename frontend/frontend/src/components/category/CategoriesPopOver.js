@@ -6,10 +6,10 @@ import Button from "@mui/material/Button";
 import CategoriesInNav from "./CategoriesInNav";
 import {Link} from "react-router-dom";
 
-export default function CategoriesPopOver({data, name}) {
+export default function CategoriesPopOver(props) {
     const [open, setOpen] = React.useState(false);
     const [anchorEl, setAnchorEl] = React.useState(null);
-
+    const {data, name, isHome,setProductData} = props
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
         setOpen((previousOpen) => !previousOpen);
@@ -53,7 +53,7 @@ export default function CategoriesPopOver({data, name}) {
                                                 fontWeight: '20'
                                             },
                                         }}>{d.name}</Link>
-                                    <CategoriesInNav key={index} data={d.children}/>
+                                    <CategoriesInNav key={index} data={d.children} isHome={isHome} setProductData={setProductData}/>
                                 </>
                             ))}
                         </Box>

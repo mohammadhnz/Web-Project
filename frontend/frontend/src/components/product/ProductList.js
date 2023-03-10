@@ -6,22 +6,60 @@ import CardMedia from '@mui/material/CardMedia';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
-import { Link as RouterLink } from 'react-router-dom';
+import {Link as RouterLink, useNavigate} from 'react-router-dom';
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import products from "../../static/products.json"
 import {FavoriteBorderOutlined, Notifications} from "@material-ui/icons";
 import IconButton from "@mui/material/IconButton";
 import noImage from "../images/no-image.png";
 import {CardActionArea} from "@mui/material";
+import {useState} from "react";
+import axios from "axios";
 
 
 // const cards = products.products.data.items;
 
 const theme = createTheme();
 
-export default function ProductList({productData}) {
-    const handleGoToPageProduct = () => {
+export default function ProductList({productData, isLogged}) {
+    const navigate = useNavigate()
+    const [product, setProduct] = useState()
 
+    const getProductData = async (url) => {
+        // TODO: get real product data
+        return axios({
+            method: 'get',
+            url: url,
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+                'Access-Control-Allow-Origin': '*'
+            },
+
+        }).then(function (response) {
+            console.log("product detail", response);
+            // setProduct(response.data)
+            return response.data
+        }).catch(function (error) {
+            console.log(error);
+        });
+        console.log("hello")
+        // const data = products.products.data.items;
+        // const product = data.find(({id}) => id === product_url);
+        // console.log(product)
+    }
+
+    const handleGoToPageProduct = async (event) => {
+        // console.log("pro url ")
+        // console.log(event.currentTarget)
+        // console.log("current event url", event.currentTarget.value)
+        const p = await getProductData(event.currentTarget.value)
+        console.log("product fucking data", p)
+        navigate("/products/productPage", {
+            state: {
+                product: p,
+                isLogged: isLogged
+            }
+        })
     }
 
     return (
@@ -35,16 +73,14 @@ export default function ProductList({productData}) {
                             <Card
                                 sx={{height: '100%', display: 'flex', flexDirection: 'column'}}
                             >
-                                <CardActionArea component={RouterLink} to="/products/productPage" state={{
-                                    product_id: card.id,
-                                }}>
+                                <CardActionArea value={card.product_url} onClick={handleGoToPageProduct}>
                                     <CardMedia
                                         component="img"
                                         sx={{
                                             // 16:9
                                             pt: '60',
                                         }}
-                                        image={noImage}
+                                        image={card.product_image_url}
                                         alt="random"
                                     />
                                     <CardContent sx={{flexGrow: 1}}>

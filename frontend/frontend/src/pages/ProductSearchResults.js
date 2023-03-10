@@ -13,11 +13,12 @@ import FiltersListItem from "../components/FiltersListItems";
 import products from "../static/products.json"
 import products2 from "../static/products2.json"
 import ProductList from "../components/product/ProductList";
-import {useEffect} from "react";
+import {useEffect, useRef} from "react";
 import {useState} from "react";
-import Typography from "@mui/material/Typography";
+import Footer from "../components/Footer";
 import ProductFilterSelect from "../components/product/ProductFilterSelect";
-import { useLocation } from "react-router-dom";
+import {useLocation} from "react-router-dom";
+import axios from "axios";
 
 const drawerWidth = 240;
 
@@ -61,18 +62,9 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
 
 const mdTheme = createTheme({
     direction: 'rtl',
-    zIndex:2
+    zIndex: 2
 });
 
-const productSampleData = {
-    product_url: "/product/detail/qAzwSx3Ed6Yh",
-    product_image_url: "",
-    shop_count: 3,
-    name: "موبایل آیفون xs max 64Gb",
-    price: " 12,000,000 تومان",
-    is_available: true,
-    updated: "12 دقیقه پیش"
-}
 
 const filterSelectItems = ["جدیدترین", "ارزان ترین", "گران ترین"]
 
@@ -80,11 +72,9 @@ export default function ProductSearchResults() {
     const [open, setOpen] = React.useState(true);
 
     const location = useLocation()
-    const productName = location.state.productName;
-    console.log(location.state)
+    const isLogged = location.state.isLogged;
+    console.log(location.state.productName)
 
-    // const [productData, setProductData] = useState([]);
-    // TODO: uncomment above and remove below
     const [productData, setProductData] = useState(products.products.data.items);
     const [field, setField] = useState('');
 
@@ -93,18 +83,37 @@ export default function ProductSearchResults() {
     };
 
     const getProductsSearchResult = () => {
-        // TODO: get api for search results
+        axios({
+            method: 'get',
+            url: 'https://2525-31-56-237-194.eu.ngrok.io/product/list',
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+                'Access-Control-Allow-Origin': '*'
+            },
+            params: {
+                name: location.state.productName,
+            }
+        }).then(function (response) {
+            console.log("search result response in search", response);
+            setProductData(response.data.items)
+        }).catch(function (error) {
+            console.log(error);
+        });
     }
 
+
+    //
     useEffect(() => {
-        getProductsSearchResult()
+        if (location.state.productName != null) {
+            getProductsSearchResult()
+        }
     }, [])
 
 
     return (
         <div dir="rtl">
-            <Header title="تربچه" sections={sections} isInHome={false} data={products.products.data.items}
-                    isLogged={false}/>
+            <Header title="تربچه" sections={sections} isHome={false} autoCompeleteData={products.products.data.items}
+                    isLogged={isLogged} setProductData={setProductData}/>
             <ThemeProvider theme={mdTheme}>
                 <Box sx={{display: 'flex'}}>
                     <CssBaseline/>
@@ -121,7 +130,7 @@ export default function ProductSearchResults() {
                             </IconButton>
                         </Toolbar>
                         <Divider/>
-                        <List sx={{width: '100%', maxWidth: 360, bgcolor: 'background.paper', }}
+                        <List sx={{width: '100%', maxWidth: 360, bgcolor: 'background.paper',}}
                               component="nav"
                               aria-labelledby="nested-list-subheader">
                             <FiltersListItem productData={productData} setProductData={setProductData}/>
@@ -145,7 +154,7 @@ export default function ProductSearchResults() {
                                              fieldItems={filterSelectItems}/>
                         <Divider/>
                         <Box sx={{p: 2, display: 'flex', flexDirection: 'column'}}>
-                            <ProductList productData={productData}/>
+                            <ProductList isLogged={isLogged} productData={productData}/>
                         </Box>
                     </Box>
                 </Box>
