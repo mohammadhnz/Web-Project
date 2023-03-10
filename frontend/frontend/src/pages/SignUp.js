@@ -116,7 +116,7 @@ export default function SignUp() {
         // });
 
         axios({
-            method: 'get',
+            method: 'post',
             url: 'http://0.0.0.0:8080/core/register/',
             data: d,
             headers: {
