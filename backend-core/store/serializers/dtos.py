@@ -189,6 +189,22 @@ class ProductListQuery(DataClass):
             if price__gt is not None:
                 range_query['gt'] = int(price__gt)
             self.filters.append(('range', {'last_history__min_price': range_query}))
+        name = query.get('name', None)
+
+        if name is not None:
+            self.filters.append(
+                (
+                    'bool',
+                    {
+                        "should": [
+                            self._get_match_query("name", name),
+                            self._get_match_query("features.name", name),
+                            self._get_match_query("features.value", name),
+                        ],
+                        "minimum_should_match": 1
+                    }
+                )
+            )
 
         is_available = query.get('is_available', None)
         if is_available is not None:
@@ -201,3 +217,14 @@ class ProductListQuery(DataClass):
             self.sort = {"last_history.created_at": {"order": "desc" if sort[-1] == '-' else "asc"}}
         if sort.startswith('price'):
             self.sort = {"last_history.price": {"order": "desc" if sort[-1] == '-' else "asc"}}
+
+    def _get_match_query(self, field, value):
+        return {
+            "match": {
+                field: {
+                    "query": value,
+                    "operator": "and",
+                    "fuzziness": "AUTO"
+                }
+            }
+        }
