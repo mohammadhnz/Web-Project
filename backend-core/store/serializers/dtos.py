@@ -89,19 +89,24 @@ class CategoryItemDTO(DataClass):
 @dataclass
 class ProductShopDTO(DataClass):
     uid: str
-    product_redirect_url: str
-    product_price_list_url: str
+    redirect_url: str
     shop_name: str
     name: str
     price: str
     is_available: bool
     updated: str
+    city: str
 
     def __init__(self, product: Product):
+        self.uid = product.uid
         self.redirect_url = '/product/redirect/?uid={}'.format(product.uid)
-        self.name = product.shop.name
+        self.shop_name = product.shop.name
+        self.name = product.name
         self.city = product.shop.city
-        self.price = ProductHistory.get_last_history_for_shop(product)
+        history = ProductHistory.get_last_history(product)
+        self.price = history.price
+        self.is_available = history.is_available
+        self.updated = product.updated_at
 
 
 @dataclass
@@ -124,13 +129,14 @@ class FeatureDTO(DataClass):
 @dataclass
 class ProductDetailItemDTO(DataClass):
     uid: str
-    product_redirect_url: str
+    best_redirect_url: str
+    product_image_url: str
     product_price_list_url: str
-    shop_name: str
     name: str
     price: str
     is_available: bool
     updated: str
+    shops: List[ProductShopDTO]
     features: List[FeatureDTO]
 
     def __init__(self, base_product: BaseProduct, available_products: List[Product]):
@@ -141,7 +147,7 @@ class ProductDetailItemDTO(DataClass):
         self.product_price_list_url = '/product/price-change/list/?uid={}'.format(base_product.uid)
         self.product_image_url = product.image_url
         self.shops = sorted([ProductShopDTO(product) for product in available_products], key=lambda x: x.price)
-        self.best_price_redirect_url = '/product/redirect/?uid={}'.format(product.uid)
+        self.best_redirect_url = '/product/redirect/?uid={}'.format(product.uid)
 
         self.name = base_product.name
         self.price = last_history.price
@@ -159,6 +165,7 @@ class ProductListItemDTO(DataClass):
     price: str
     is_available: bool
     updated: str
+    category_id: int
 
     def __init__(self, product):
         self.product_url = '/product/detail/{}'.format(product.uid)
@@ -168,12 +175,14 @@ class ProductListItemDTO(DataClass):
         self.price = product.last_history.min_price
         self.is_available = product.last_history.is_available
         self.updated = product.last_history.created_at
+        self.category_id = product.categories[0]['id']
 
 
 @dataclass
 class ProductListQuery(DataClass):
     filters: List[tuple]
     sort: dict
+    category_id: int
 
     def __init__(self, query):
         self.filters = []
@@ -186,16 +195,42 @@ class ProductListQuery(DataClass):
             if price__gt is not None:
                 range_query['gt'] = int(price__gt)
             self.filters.append(('range', {'last_history__min_price': range_query}))
+        name = query.get('name', None)
+
+        if name is not None:
+            self.filters.append(
+                (
+                    'bool',
+                    {
+                        "should": [
+                            self._get_match_query("name", name),
+                            self._get_match_query("features.name", name),
+                            self._get_match_query("features.value", name),
+                        ],
+                        "minimum_should_match": 1
+                    }
+                )
+            )
 
         is_available = query.get('is_available', None)
         if is_available is not None:
             self.filters.append(('term', {'last_history__is_available': is_available}))
         category_id = query.get('category_id', None)
-        if category_id is not None:
-            self.filters.append(('term', {'categories__id': category_id}))
+        self.category_id = int(category_id) if category_id else None
 
         sort = query.get('sort', 'date_updated-')
         if sort.startswith('date_updated'):
             self.sort = {"last_history.created_at": {"order": "desc" if sort[-1] == '-' else "asc"}}
         if sort.startswith('price'):
             self.sort = {"last_history.price": {"order": "desc" if sort[-1] == '-' else "asc"}}
+
+    def _get_match_query(self, field, value):
+        return {
+            "match": {
+                field: {
+                    "query": value,
+                    "operator": "and",
+                    "fuzziness": "AUTO"
+                }
+            }
+        }

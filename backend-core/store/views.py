@@ -4,14 +4,14 @@ from collections import defaultdict
 from django.http import HttpResponseBadRequest
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
-from django.views.generic.base import RedirectView
+from django.views.generic.base import RedirectView, TemplateView
 from django.views.generic.edit import BaseFormView
 from django.views.generic.list import BaseListView
 
+from store.serializers.dtos import ProductCreateOrUpdateForm, ProductPriceChangeListDTO, CategoryItemDTO, \
+    ProductListItemDTO, ProductListQuery, ProductDetailItemDTO
+from store.models import ProductHistory, Category, Product, Shop, BaseProduct
 from store.services.documents import ProductDocument
-from store.serializers.dtos import ProductCreateOrUpdateForm, ProductPriceChangeListDTO, CategoryItemDTO, ProductListItemDTO, \
-    ProductListQuery
-from store.models import ProductHistory, Category, Product, Shop
 from store.services.usecase import suggest_category, get_or_select_base_product
 from store.services.utils import replace_query
 
@@ -91,6 +91,8 @@ class NestedCategoriesListView(ListView):
         all_categories = Category.objects.all()
         parents_map = defaultdict(set)
         categories_data = {c.id: CategoryItemDTO(c).dict() for c in all_categories}
+        for category_id, category in categories_data.items():
+            category['link'] = f"/product/list?category_id={category_id}"
         for category in all_categories:
             parents_map[category.parent_id].add(category.id)
 
@@ -124,3 +126,9 @@ class ProductList(ListView):
 
     def get_items(self, context):
         return [ProductListItemDTO(x).dict() for x in context['object_list']]
+
+
+def get_product(request, uid):
+    base_product = get_object_or_404(BaseProduct, uid=uid)
+    products = Product.objects.filter(base_product=base_product)
+    return JsonResponse(data=ProductDetailItemDTO(base_product, products).dict())

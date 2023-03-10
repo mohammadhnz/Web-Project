@@ -14,9 +14,9 @@ from pathlib import Path
 
 from decouple import config
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+from corsheaders.defaults import default_headers
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.postgres',
     'django_elasticsearch_dsl',
+    'corsheaders',
     'core',
     'store',
 ]
@@ -52,6 +53,37 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware'
+]
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = [
+    'https://e02f-31-56-237-194.eu.ngrok.io',
+    'http://0.0.0.0:8080',
+    'http://localhost:3000'
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    'https://e02f-31-56-237-194.eu.ngrok.io',
+    'http://0.0.0.0:8080',
+    'http://localhost:3000'
+
+]
+
+CORS_ALLOWED_ORIGINS = [
+    'https://e02f-31-56-237-194.eu.ngrok.io',
+    'http://0.0.0.0:8080',
+    'http://localhost:3000'
+]
+
+
+CORS_ALLOW_HEADERS = list(default_headers) + [
+    'Bypass-Tunnel-Reminder',
+    'Access-Control-Allow-Origin',
+    'Access-Control-Allow-Methods',
+    'Access-Control-Allow-Headers',
+    'Access-Control-Allow-Origin',
+    'Content-Type'
 ]
 
 ELASTICSEARCH_DSL = {
