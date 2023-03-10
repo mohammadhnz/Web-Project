@@ -69,20 +69,6 @@ export default function FiltersListItem({productData, setProductData}) {
 
     return (
         <>
-
-            {/*<ListItemButton onClick={handleClickBrand}>*/}
-            {/*    <ListItemIcon>*/}
-            {/*        <BrandingWatermark/>*/}
-            {/*    </ListItemIcon>*/}
-            {/*    <ListItemText primary="انتخاب برند"/>*/}
-            {/*    {openBrand ? <ExpandLess/> : <ExpandMore/>}*/}
-            {/*</ListItemButton>*/}
-            {/*<Collapse in={openBrand} timeout="auto" unmountOnExit>*/}
-            {/*    <List component="div" disablePadding>*/}
-            {/*        <SearchInNav/>*/}
-            {/*    </List>*/}
-            {/*</Collapse>*/}
-
             <ListItemButton onClick={handleClickCategory}>
                 <ListItemIcon>
                     <Category/>

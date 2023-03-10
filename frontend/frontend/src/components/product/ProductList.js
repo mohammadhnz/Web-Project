@@ -23,14 +23,15 @@ export default function ProductList({productData}) {
     const handleGoToPageProduct = () => {
 
     }
+
     return (
         <ThemeProvider theme={theme}>
             {/*<CssBaseline />*/}
             {/*<main>*/}
             <Container sx={{py: 1}} maxWidth="md">
                 <Grid container spacing={2}>
-                    {productData.map((card) => (
-                        <Grid item key={card} xs={12} sm={6} md={3}>
+                    {productData.map((card, index) => (
+                        <Grid item key={index} xs={12} sm={6} md={3}>
                             <Card
                                 sx={{height: '100%', display: 'flex', flexDirection: 'column'}}
                             >

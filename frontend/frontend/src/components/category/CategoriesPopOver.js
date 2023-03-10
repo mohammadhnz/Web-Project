@@ -36,11 +36,12 @@ export default function CategoriesPopOver({data, name}) {
             <Popper id={id} open={open} anchorEl={anchorEl} transition >
                 {({TransitionProps}) => (
                     <Fade {...TransitionProps} timeout={350}>
-                        <Box sx={{border: 1, borderRadius: 2, p: 1, bgcolor: 'background.paper', maxWidth: 600, overflowY: 'auto'}}>
-                            {data.map((d) => (
+                        <Box sx={{ border: 1, borderRadius: 2, p: 1, bgcolor: 'background.paper', maxWidth: 600, overflowY: 'auto'}}>
+                            {data.map((d, index) => (
                                 <>
                                     <Link
                                         component={<Button/>}
+                                        key={index}
                                         style={{
                                             textDecoration: 'none',
                                             color: "#450115",
@@ -52,7 +53,7 @@ export default function CategoriesPopOver({data, name}) {
                                                 fontWeight: '20'
                                             },
                                         }}>{d.name}</Link>
-                                    <CategoriesInNav data={d.children}/>
+                                    <CategoriesInNav key={index} data={d.children}/>
                                 </>
                             ))}
                         </Box>

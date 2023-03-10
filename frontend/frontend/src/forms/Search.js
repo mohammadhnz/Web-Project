@@ -1,12 +1,12 @@
 import React, {useState} from "react";
 import {ReactSearchAutocomplete} from "react-search-autocomplete";
+
 import {
     FormControl,
-    InputAdornment,
-    TextField,
     createStyles,
     makeStyles
 } from "@material-ui/core";
+import {useNavigate} from "react-router";
 
 const useStyles = makeStyles(() => {
     return createStyles({
@@ -17,25 +17,52 @@ const useStyles = makeStyles(() => {
 });
 
 export default function Search({data}) {
-    const {search} = useStyles();
-    const options = data;
-    const defaultProps = {
-        options: options,
-        getOptionLabel: (option) => option.name
+    const [productName, setProductName] = useState("")
+    const [searchResult, setSearchResult] = useState("");
+    const navigate = useNavigate();
+
+
+    const getProductSearchResult = () => {
+        // TODO: get search request
+    }
+
+    const handleOnSelect = (item) => {
+        setProductName(item.name)
+        console.log("final select", item.name)
+        getProductSearchResult()
+        navigate('/products', {
+            state: {
+                productName: productName,
+            }
+        });
     };
 
-    const [showClearIcon, setShowClearIcon] = useState("none");
-
-    const handleChange = (event) => {
-        setShowClearIcon(event.target.value === "" ? "none" : "flex");
+    const handleOnSearch = (string, results) => {
+        setSearchResult(string)
     };
 
-    const handleClick = () => {
+    const handleKeyPress = (event) => {
+        if (event.key === 'Enter') {
+            setProductName(searchResult)
+            console.log("final search", searchResult)
+            getProductSearchResult()
+            navigate('/products', {
+                state: {
+                    productName: productName,
+                }
+            });
+        }
+    }
 
+    const handleOnFocus = () => {
+        console.log("Focused");
+    };
+
+    const handleOnClear = () => {
+        console.log("Cleared");
     };
 
     const formatResult = (item) => {
-        console.log(item);
         return (
             <div className="result-wrapper">
                 <span className="result-span">{item.name}</span>
@@ -45,15 +72,15 @@ export default function Search({data}) {
 
     return (
         <div>
-            <FormControl>
-                <div style={{width: 300, margin: 10}}>
+            <FormControl style={{zIndex: 1}}>
+                <div style={{width: 300, margin: 10, }} onKeyPress={handleKeyPress}>
                     <ReactSearchAutocomplete
                         items={data}
-                        // onSearch={handleOnSearch}
+                        onSearch={handleOnSearch}
                         // onHover={handleOnHover}
-                        // onSelect={handleOnSelect}
-                        // onFocus={handleOnFocus}
-                        // onClear={handleOnClear}
+                        onSelect={handleOnSelect}
+                        onFocus={handleOnFocus}
+                        onClear={handleOnClear}
                         styling={{zIndex: 1, border: '2px solid #8f032b'}}
                         formatResult={formatResult}
                         autoFocus

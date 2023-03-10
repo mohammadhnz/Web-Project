@@ -1,9 +1,10 @@
 import Search from "../forms/Search";
-import {Container, CssBaseline, Link} from "@mui/material";
+import {Container, CssBaseline, Link, ThemeProvider} from "@mui/material";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
-import React from "react";
+import React, {useState} from "react";
 import products from "../static/products.json"
+import {createTheme} from "@mui/material/styles";
 
 const sections = [
     {title: 'موبایل و کالای دیجیتال', url: '#'},
@@ -18,15 +19,22 @@ const sections = [
 ];
 
 export default function Home() {
+    const theme = createTheme({
+        direction: 'rtl',
+        zIndex: 2
+    });
     return (
-        <div dir='rtl' className=" rmdp-rtl">
-            <Header title="تربچه" sections={sections} isInHome={true} isLogged={false} data={products.products.data.items}/>
-            <CssBaseline/>
-            <Container align="center">
-                <h3>کالایی که میخواهید را وارد کنید</h3>
-                <Search data={products.products.data.items}/>
-            </Container>
-            <Footer/>
+        <div dir="rtl">
+            <Header title="تربچه" sections={sections} isInHome={true} isLogged={false}
+                    data={products.products.data.items}/>
+            <ThemeProvider theme={theme}>
+                <CssBaseline/>
+                <Container align="center">
+                    <h3>کالایی که میخواهید را وارد کنید</h3>
+                    <Search data={products.products.data.items}/>
+                </Container>
+                <Footer/>
+            </ThemeProvider>
         </div>
     )
 }

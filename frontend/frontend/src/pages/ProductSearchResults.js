@@ -17,7 +17,7 @@ import {useEffect} from "react";
 import {useState} from "react";
 import Typography from "@mui/material/Typography";
 import ProductFilterSelect from "../components/product/ProductFilterSelect";
-
+import { useLocation } from "react-router-dom";
 
 const drawerWidth = 240;
 
@@ -61,6 +61,7 @@ const Drawer = styled(MuiDrawer, {shouldForwardProp: (prop) => prop !== 'open'})
 
 const mdTheme = createTheme({
     direction: 'rtl',
+    zIndex:2
 });
 
 const productSampleData = {
@@ -77,6 +78,11 @@ const filterSelectItems = ["جدیدترین", "ارزان ترین", "گران 
 
 export default function ProductSearchResults() {
     const [open, setOpen] = React.useState(true);
+
+    const location = useLocation()
+    const productName = location.state.productName;
+    console.log(location.state)
+
     // const [productData, setProductData] = useState([]);
     // TODO: uncomment above and remove below
     const [productData, setProductData] = useState(products.products.data.items);
@@ -115,7 +121,7 @@ export default function ProductSearchResults() {
                             </IconButton>
                         </Toolbar>
                         <Divider/>
-                        <List sx={{width: '100%', maxWidth: 360, bgcolor: 'background.paper'}}
+                        <List sx={{width: '100%', maxWidth: 360, bgcolor: 'background.paper', }}
                               component="nav"
                               aria-labelledby="nested-list-subheader">
                             <FiltersListItem productData={productData} setProductData={setProductData}/>
@@ -135,7 +141,8 @@ export default function ProductSearchResults() {
                         }}
                     >
                         <Toolbar/>
-                        <ProductFilterSelect setProductData={setProductData} field={field} setField={setField} fieldItems={filterSelectItems}/>
+                        <ProductFilterSelect setProductData={setProductData} field={field} setField={setField}
+                                             fieldItems={filterSelectItems}/>
                         <Divider/>
                         <Box sx={{p: 2, display: 'flex', flexDirection: 'column'}}>
                             <ProductList productData={productData}/>

@@ -1,0 +1,51 @@
+{
+  "users": [
+    {
+      "email": "roya@gmail.com",
+      "password": "haha123",
+      "id": 1
+    },
+    {
+      "email": "royaghavamiadel@gmail.com",
+      "password": "dklhg8283",
+      "id": 2
+    },
+    {
+      "email": "royaghavamiadel@gmail.com",
+      "password": "ihiyfyt",
+      "id": 3
+    },
+    {
+      "email": "royaghavamiadel@gmail.com",
+      "password": "98762jjj",
+      "id": 4
+    },
+    {
+      "firstName": null,
+      "lastName": "Ghavam",
+      "email": "royasara99@gmail.com",
+      "password": "9876bhjjjj",
+      "gender": "male",
+      "account_type": "seller",
+      "id": 5
+    },
+    {
+      "firstName": null,
+      "lastName": "Ghavami",
+      "email": "royasara99@gmail.com",
+      "password": "93837kfjhkd",
+      "gender": "male",
+      "account_type": "seller",
+      "id": 6
+    },
+    {
+      "firstName": null,
+      "lastName": "GhavamiAdel",
+      "email": "royaghavamiadel@gmail.com",
+      "password": "jkg976kf",
+      "gender": "male",
+      "account_type": "seller",
+      "id": 7
+    }
+  ]
+}
