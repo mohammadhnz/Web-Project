@@ -1,21 +1,19 @@
+import json
 from collections import defaultdict
 
-import json
-import environ
-from django.views.generic.edit import BaseFormView
-from django.views.generic.base import RedirectView
-from django.views.generic.list import BaseListView
+from django.http import HttpResponseBadRequest
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
+from django.views.generic.base import RedirectView
+from django.views.generic.edit import BaseFormView
+from django.views.generic.list import BaseListView
 
-from .documents import ProductDocument
-from .dtos import ProductCreateOrUpdateForm, ProductPriceChangeListDTO, CategoryItemDTO, ProductListItemDTO, \
+from store.services.documents import ProductDocument
+from store.serializers.dtos import ProductCreateOrUpdateForm, ProductPriceChangeListDTO, CategoryItemDTO, ProductListItemDTO, \
     ProductListQuery
-from .models import ProductHistory, Category, Product, Shop, BaseProduct
-from .usecase import suggest_category, get_or_select_base_product
-from .utils import replace_query
-
-env = environ.Env()
+from store.models import ProductHistory, Category, Product, Shop
+from store.services.usecase import suggest_category, get_or_select_base_product
+from store.services.utils import replace_query
 
 
 class ListView(BaseListView):
@@ -54,6 +52,9 @@ class CreateOrUpdate(BaseFormView):
 
     def form_valid(self, form):
         data = form.cleaned_data
+        form.shop = Shop.objects.filter(domain=data.get('shop_domain')).first()
+        if form.shop is None:
+            return HttpResponseBadRequest()
         form.shop = get_object_or_404(Shop, domain=data.get('shop_domain'))
         form.category_id = suggest_category(data.get('name'), json.loads(data.get('features')))
         form.base_product = get_or_select_base_product(data.get('name'),

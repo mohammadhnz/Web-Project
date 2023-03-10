@@ -4,7 +4,7 @@ import django.contrib.postgres.fields.hstore
 from django.contrib.postgres.operations import HStoreExtension
 from django.db import migrations, models
 import django.db.models.deletion
-import store.utils
+from store.services import utils
 
 
 class Migration(migrations.Migration):
@@ -31,7 +31,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Product',
             fields=[
-                ('uid', models.CharField(default=store.utils.generate_uid, editable=False, max_length=11, primary_key=True, serialize=False)),
+                ('uid', models.CharField(default=utils.generate_uid, editable=False, max_length=11, primary_key=True, serialize=False)),
                 ('name', models.CharField(max_length=50, unique=True)),
                 ('page_url', models.CharField(max_length=200)),
                 ('features', django.contrib.postgres.fields.hstore.HStoreField(blank=True, null=True)),
@@ -43,7 +43,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Shop',
             fields=[
-                ('uid', models.CharField(default=store.utils.generate_uid, editable=False, max_length=11, primary_key=True, serialize=False)),
+                ('uid', models.CharField(default=utils.generate_uid, editable=False, max_length=11, primary_key=True, serialize=False)),
                 ('name', models.CharField(max_length=50, unique=True)),
                 ('domain', models.CharField(max_length=50, unique=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
@@ -53,7 +53,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='ProductHistory',
             fields=[
-                ('uid', models.CharField(default=store.utils.generate_uid, editable=False, max_length=11, primary_key=True, serialize=False)),
+                ('uid', models.CharField(default=utils.generate_uid, editable=False, max_length=11, primary_key=True, serialize=False)),
                 ('price', models.IntegerField()),
                 ('is_available', models.BooleanField(default=True)),
                 ('created_at', models.DateTimeField(auto_now_add=True)),
