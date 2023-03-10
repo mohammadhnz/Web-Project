@@ -99,35 +99,35 @@ export default function SignUp() {
         //     body: d
         // };
 
-        fetch('http://0.0.0.0:8080/core/register/', {
-            method: 'POST',
-            body: {'h': 'dh'},
-            headers:{
-                'Content-Type': 'application/json;charset=UTF-8',
-                'Access-Control-Allow-Origin': '*'
-            }
-        })
-            .then(res => console.log(res.headers)
-            )
-            .then(res => {
-                console.log(res)
-            }).catch((err) => {
-            console.log(err);
-        });
-
-        // axios({
-        //     method: 'get',
-        //     url: 'https://e02f-31-56-237-194.eu.ngrok.io/core/register/',
-        //     data: "",
-        //     headers: {
+        // fetch('http://0.0.0.0:8080/core/register/', {
+        //     method: 'POST',
+        //     body: {'h': 'dh'},
+        //     headers:{
         //         'Content-Type': 'application/json;charset=UTF-8',
         //         'Access-Control-Allow-Origin': '*'
-        //     },
-        // }).then(function (response) {
-        //     console.log(response);
-        // }).catch(function (error) {
-        //     console.log(error);
+        //     }
+        // })
+        //     .then(res => console.log(res.headers)
+        //     )
+        //     .then(res => {
+        //         console.log(res)
+        //     }).catch((err) => {
+        //     console.log(err);
         // });
+
+        axios({
+            method: 'get',
+            url: 'http://0.0.0.0:8080/core/register/',
+            data: d,
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+                'Access-Control-Allow-Origin': '*'
+            },
+        }).then(function (response) {
+            console.log(response);
+        }).catch(function (error) {
+            console.log(error);
+        });
         // navigate("/");
     };
 
