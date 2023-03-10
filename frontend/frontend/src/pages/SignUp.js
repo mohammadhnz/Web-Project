@@ -99,7 +99,7 @@ export default function SignUp() {
         //     body: d
         // };
 
-        fetch('https://e02f-31-56-237-194.eu.ngrok.io/core/register/', {
+        fetch('http://0.0.0.0:8080/core/register/', {
             method: 'POST',
             body: {'h': 'dh'},
             headers:{
