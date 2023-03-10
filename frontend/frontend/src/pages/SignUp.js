@@ -103,7 +103,8 @@ export default function SignUp() {
             method: 'POST',
             body: {'h': 'dh'},
             headers:{
-                'Content-Type': 'application/json;charset=UTF-8'
+                'Content-Type': 'application/json;charset=UTF-8',
+                'Access-Control-Allow-Origin': '*'
             }
         })
             .then(res => console.log(res.headers)
