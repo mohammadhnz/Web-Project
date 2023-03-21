@@ -17,8 +17,7 @@ class ShopAdmin(admin.ModelAdmin):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('uid', 'name', 'base_product')
-    list_editable = ('base_product',)
+    list_display = ('uid', 'name', 'base_product', 'shop')
     search_fields = ('name', )
 
 

@@ -19,7 +19,7 @@ from store.services.utils import replace_query
 
 class ListView(BaseListView):
     def get_paginate_by(self, queryset):
-        return self.request.GET.get('size', 10)
+        return self.request.GET.get('size', 20)
 
     def get_url_on_page(self, page):
         return self.request.build_absolute_uri(replace_query(self.request, 'page', page))
@@ -55,7 +55,7 @@ class CreateOrUpdate(BaseFormView):
         data = form.cleaned_data
         form.shop = Shop.objects.filter(domain=data.get('shop_domain')).first()
         if form.shop is None:
-            print("WHAT THE FUCK?   ",data.get('shop_domain'))
+            print("WHAT THE FUCK?   ", data.get('shop_domain'))
             return HttpResponseBadRequest()
         form.shop = get_object_or_404(Shop, domain=data.get('shop_domain'))
         form.category_id = suggest_category(data.get('name'), json.loads(data.get('features')))
@@ -135,3 +135,20 @@ def get_product(request, uid):
     base_product = get_object_or_404(BaseProduct, uid=uid)
     products = Product.objects.filter(base_product=base_product)
     return JsonResponse(data=ProductDetailItemDTO(base_product, products).dict())
+
+
+# base_product = BaseProduct.objects.filter(uid="RbQeXUBgPeN").first()
+# for bp_uid in ["XYGapsADNys", "kbGgpqNgn8J", "HQbgzMTfZvC", "ddZrZe3X2Nh", "34BQFNkA5SL"]:
+#     try:
+#         pr_base = BaseProduct.objects.filter(uid=bp_uid).first()
+#         pr = Product.objects.filter(base_product=pr_base).first()
+#         pr.base_product = base_product
+#         pr.save()
+#     except Exception as e:
+#         print(bp_uid)
+#
+for base_product in BaseProduct.objects.all():
+    if Product.objects.filter(base_product=base_product).count() == 0:
+        base_product.delete()
+
+# ProductHistory.objects.filter(price=-1).update(price=0, is_available=False)

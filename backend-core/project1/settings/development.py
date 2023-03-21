@@ -28,9 +28,9 @@ SECRET_KEY = config('SECRET_KEY')
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+BASE_URL = "https://bd90-31-56-230-17.eu.ngrok.io"
 
 # Application definition
-BASE_URL = 'https://2525-31-56-237-194.eu.ngrok.io/'
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -60,21 +60,12 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_WHITELIST = [
     'https://2525-31-56-237-194.eu.ngrok.io',
     'http://0.0.0.0:8080',
-    'http://localhost:3000'
+    'http://localhost:3000',
+    BASE_URL
 ]
 
-CSRF_TRUSTED_ORIGINS = [
-    'https://2525-31-56-237-194.eu.ngrok.io',
-    'http://0.0.0.0:8080',
-    'http://localhost:3000'
-
-]
-
-CORS_ALLOWED_ORIGINS = [
-    'https://2525-31-56-237-194.eu.ngrok.io',
-    'http://0.0.0.0:8080',
-    'http://localhost:3000'
-]
+CSRF_TRUSTED_ORIGINS = CORS_ORIGIN_WHITELIST
+CORS_ALLOWED_ORIGINS = CORS_ORIGIN_WHITELIST
 
 
 CORS_ALLOW_HEADERS = list(default_headers) + [

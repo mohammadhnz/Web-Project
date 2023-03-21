@@ -1,4 +1,5 @@
 import json
+import math
 from dataclasses import dataclass, asdict
 from datetime import datetime
 from typing import List, Optional, Dict
@@ -10,9 +11,9 @@ from store.models import ProductHistory, Category, Product, BaseProduct
 
 
 class ProductCreateOrUpdateForm(forms.Form):
-    page_url = forms.CharField(max_length=300, required=True)
-    image_url = forms.CharField(max_length=300, required=True)
-    shop_domain = forms.CharField(max_length=200, required=True)
+    page_url = forms.CharField(max_length=500, required=True)
+    image_url = forms.CharField(max_length=500, required=True)
+    shop_domain = forms.CharField(max_length=500, required=True)
     name = forms.CharField(max_length=300, required=True)
     price = forms.IntegerField(required=True)
     is_available = forms.BooleanField(required=False, initial=False)
@@ -147,7 +148,10 @@ class ProductDetailItemDTO(DataClass):
         self.uid = base_product.uid
         self.product_price_list_url = settings.BASE_URL + '/product/price-change/list/?uid={}'.format(base_product.uid)
         self.product_image_url = product.image_url
-        self.shops = sorted([ProductShopDTO(product) for product in available_products], key=lambda x: x.price)
+        self.shops = sorted(
+            [ProductShopDTO(product) for product in available_products],
+            key=lambda x: math.inf if x.price == 0 else x.price
+        )
         self.best_redirect_url = settings.BASE_URL + '/product/redirect?uid={}'.format(product.uid)
 
         self.name = base_product.name
