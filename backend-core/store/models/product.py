@@ -45,12 +45,10 @@ class ProductHistory(models.Model):
         best_product, best_history = None, None
         for product in products:
             last_history = ProductHistory.get_last_history(product)
-            if best_history is None \
-                    or (not best_history.is_available and last_history.is_available) \
-                    or best_history.price > last_history.price:
+            if last_history.is_available and (best_history is None or best_history.price > last_history.price):
                 best_history = last_history
                 best_product = product
-        return best_product
+        return best_product if best_product else products.first()
 
     @staticmethod
     def get_last_history(product: Product):

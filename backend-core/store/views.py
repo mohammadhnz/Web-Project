@@ -1,6 +1,7 @@
 import json
 from collections import defaultdict
 
+from django.conf import settings
 from django.http import HttpResponseBadRequest
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -18,7 +19,7 @@ from store.services.utils import replace_query
 
 class ListView(BaseListView):
     def get_paginate_by(self, queryset):
-        return self.request.GET.get('size', 10)
+        return self.request.GET.get('size', 20)
 
     def get_url_on_page(self, page):
         return self.request.build_absolute_uri(replace_query(self.request, 'page', page))
@@ -54,6 +55,7 @@ class CreateOrUpdate(BaseFormView):
         data = form.cleaned_data
         form.shop = Shop.objects.filter(domain=data.get('shop_domain')).first()
         if form.shop is None:
+            print("WHAT THE FUCK?   ", data.get('shop_domain'))
             return HttpResponseBadRequest()
         form.shop = get_object_or_404(Shop, domain=data.get('shop_domain'))
         form.category_id = suggest_category(data.get('name'), json.loads(data.get('features')))
@@ -63,7 +65,7 @@ class CreateOrUpdate(BaseFormView):
                                                        data.get('price'))
         form.product, _ = Product.objects.update_or_create(name=data.get('name'), defaults=form.product_fields())
         ProductHistory.objects.create(**form.product_history_fields())
-        ProductDocument().update(form.base_product)
+        # ProductDocument().update(form.base_product)
         return JsonResponse({"uid": form.product.uid})
 
     def form_invalid(self, form):
@@ -72,8 +74,8 @@ class CreateOrUpdate(BaseFormView):
 
 class Redirect(RedirectView):
     def get_redirect_url(self):
-        shop = get_object_or_404(Product, uid=self.request.GET.get('uid', None)).shop
-        return 'https://{}'.format(shop.domain)
+        product = get_object_or_404(Product, uid=self.request.GET.get('uid', None))
+        return product.page_url
 
 
 class CategoryList(ListView):
@@ -92,7 +94,7 @@ class NestedCategoriesListView(ListView):
         parents_map = defaultdict(set)
         categories_data = {c.id: CategoryItemDTO(c).dict() for c in all_categories}
         for category_id, category in categories_data.items():
-            category['link'] = f"/product/list?category_id={category_id}"
+            category['link'] = settings.BASE_URL + f"/product/list?category_id={category_id}"
         for category in all_categories:
             parents_map[category.parent_id].add(category.id)
 
@@ -125,6 +127,7 @@ class ProductList(ListView):
         return ProductDocument.create_query(ProductListQuery(self.request.GET)).execute()
 
     def get_items(self, context):
+        print(self.request.GET)
         return [ProductListItemDTO(x).dict() for x in context['object_list']]
 
 
@@ -132,3 +135,20 @@ def get_product(request, uid):
     base_product = get_object_or_404(BaseProduct, uid=uid)
     products = Product.objects.filter(base_product=base_product)
     return JsonResponse(data=ProductDetailItemDTO(base_product, products).dict())
+
+
+# base_product = BaseProduct.objects.filter(uid="RbQeXUBgPeN").first()
+# for bp_uid in ["XYGapsADNys", "kbGgpqNgn8J", "HQbgzMTfZvC", "ddZrZe3X2Nh", "34BQFNkA5SL"]:
+#     try:
+#         pr_base = BaseProduct.objects.filter(uid=bp_uid).first()
+#         pr = Product.objects.filter(base_product=pr_base).first()
+#         pr.base_product = base_product
+#         pr.save()
+#     except Exception as e:
+#         print(bp_uid)
+#
+for base_product in BaseProduct.objects.all():
+    if Product.objects.filter(base_product=base_product).count() == 0:
+        base_product.delete()
+
+# ProductHistory.objects.filter(price=-1).update(price=0, is_available=False)

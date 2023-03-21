@@ -1,17 +1,19 @@
 import json
+import math
 from dataclasses import dataclass, asdict
 from datetime import datetime
 from typing import List, Optional, Dict
 
 from django import forms
+from django.conf import settings
 
 from store.models import ProductHistory, Category, Product, BaseProduct
 
 
 class ProductCreateOrUpdateForm(forms.Form):
-    page_url = forms.CharField(max_length=300, required=True)
-    image_url = forms.CharField(max_length=300, required=True)
-    shop_domain = forms.CharField(max_length=200, required=True)
+    page_url = forms.CharField(max_length=500, required=True)
+    image_url = forms.CharField(max_length=500, required=True)
+    shop_domain = forms.CharField(max_length=500, required=True)
     name = forms.CharField(max_length=300, required=True)
     price = forms.IntegerField(required=True)
     is_available = forms.BooleanField(required=False, initial=False)
@@ -99,7 +101,7 @@ class ProductShopDTO(DataClass):
 
     def __init__(self, product: Product):
         self.uid = product.uid
-        self.redirect_url = '/product/redirect/?uid={}'.format(product.uid)
+        self.redirect_url = settings.BASE_URL + '/product/redirect?uid={}'.format(product.uid)
         self.shop_name = product.shop.name
         self.name = product.name
         self.city = product.shop.city
@@ -144,10 +146,13 @@ class ProductDetailItemDTO(DataClass):
         last_history = ProductHistory.get_last_history(product)
 
         self.uid = base_product.uid
-        self.product_price_list_url = '/product/price-change/list/?uid={}'.format(base_product.uid)
+        self.product_price_list_url = settings.BASE_URL + '/product/price-change/list/?uid={}'.format(base_product.uid)
         self.product_image_url = product.image_url
-        self.shops = sorted([ProductShopDTO(product) for product in available_products], key=lambda x: x.price)
-        self.best_redirect_url = '/product/redirect/?uid={}'.format(product.uid)
+        self.shops = sorted(
+            [ProductShopDTO(product) for product in available_products],
+            key=lambda x: math.inf if x.price == 0 else x.price
+        )
+        self.best_redirect_url = settings.BASE_URL + '/product/redirect?uid={}'.format(product.uid)
 
         self.name = base_product.name
         self.price = last_history.price
@@ -168,7 +173,7 @@ class ProductListItemDTO(DataClass):
     category_id: int
 
     def __init__(self, product):
-        self.product_url = '/product/detail/{}'.format(product.uid)
+        self.product_url = settings.BASE_URL + '/product/detail/{}'.format(product.uid)
         self.product_image_url = product.image_url
         self.shop_count = product.shop_count
         self.name = product.name
