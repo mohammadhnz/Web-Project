@@ -16,6 +16,13 @@ import ProductList from "../components/product/ProductList";
 import Typography from "@mui/material/Typography";
 import ProductShopsList from "../components/product/ProductShopsList";
 import Divider from "@mui/material/Divider";
+import Card from "@mui/material/Card";
+import {CardActionArea} from "@mui/material";
+import CardMedia from "@mui/material/CardMedia";
+import CardContent from "@mui/material/CardContent";
+import CardActions from "@mui/material/CardActions";
+import IconButton from "@mui/material/IconButton";
+import {FavoriteBorderOutlined, Notifications} from "@material-ui/icons";
 
 const drawerWidth = 240;
 
@@ -120,13 +127,19 @@ export default function ProductPage() {
                                             display: 'flex',
                                             flexDirection: 'column',
                                             height: 400,
+                                            overflow: 'auto'
                                         }}
                                     >
                                         <Typography variant="h6" sx={{
                                             fontWeight: 'bold',
                                         }}> مشخصات {product.name}</Typography>
-                                        <Typography variant="subtitle2" sx={{marginTop: 5}}>مشخصات کلی</Typography>
+                                        <Typography variant="subtitle2" sx={{marginTop: 3}}>مشخصات کلی</Typography>
                                         <Divider/>
+                                        {product.features.map((feature, index) => (
+                                            <Typography>
+                                                <Typography fontWeight='bold'>{feature.name} :</Typography>{feature.value}
+                                            </Typography>
+                                        ))}
                                     </Paper>
                                 </Grid>
 

@@ -12,16 +12,12 @@ import {Link as RouterLink} from 'react-router-dom';
 
 
 export default function ProductDetail({data}) {
-
     return (
         <>
             <Container maxWidth="lg" sx={{mt: 4, mb: 4}}>
                 <Grid container spacing={4}>
-                    <Grid item xs={12} md={2} lg={3} alignContent="center">
-                        <Image sx={{
-                            width: 120,
-                            height: 120,
-                        }} src={data.product_image_url} className="githubIcon"/>
+                    <Grid item xs={12} md={2} lg={3} alignContent="center" display='block'>
+                        <Image width={100} src={data.product_image_url} className="githubIcon"/>
                     </Grid>
                     <Grid item xs={12} md={8} lg={8}>
                         <Grid
@@ -36,9 +32,20 @@ export default function ProductDetail({data}) {
                         </Grid>
 
                         <Grid container columns={{xs: 4, md: 12}}>
-                            <RouterLink component={<MainButton/>} to={data.best_redirect_url} variant="contained" color="primary" sx={{height: 40, width: 250}}>
-                                خرید از ارزان ترین فروشنده
-                            </RouterLink>
+                            {data.is_available &&
+                                (
+                                    <RouterLink component={<MainButton/>} to={data.best_redirect_url}
+                                                variant="contained"
+                                                color="primary" sx={{height: 40, width: 250}}>
+                                        خرید از ارزان ترین فروشنده
+                                    </RouterLink>
+                                )}
+                            {!data.is_available &&
+                                (
+                                    <MainButton>
+                                        کالا موجود نیست
+                                    </MainButton>
+                                )}
                             <IconButton title="به من اطلاع بده">
                                 <Notifications/>
                             </IconButton>

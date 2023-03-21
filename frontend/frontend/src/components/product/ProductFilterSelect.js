@@ -6,7 +6,7 @@ import Select from '@mui/material/Select';
 import newProductsFilterTest from "../../static/products2.json";
 import axios from "axios";
 
-export default function ProductFilterSelect({field, setField, fieldItems, setProductData}) {
+export default function ProductFilterSelect({field, setField, fieldItems, setProductData, productName}) {
     const getNewest = () => {
         // TODO: get api for search results
         axios({
@@ -17,6 +17,7 @@ export default function ProductFilterSelect({field, setField, fieldItems, setPro
                 'Access-Control-Allow-Origin': '*'
             },
             params: {
+                name: productName,
                 sort: 'date_updated+',
             }
         }).then(function (response) {

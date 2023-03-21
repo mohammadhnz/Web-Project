@@ -149,7 +149,7 @@ export default function ProductSearchResults() {
                     >
                         <Toolbar/>
                         <ProductFilterSelect setProductData={setProductData} field={field} setField={setField}
-                                             fieldItems={filterSelectItems}/>
+                                             fieldItems={filterSelectItems} productName={location.state.productName}/>
                         <Divider/>
                         <Box sx={{p: 2, display: 'flex', flexDirection: 'column'}}>
                             <ProductList isLogged={isLogged} productData={productData}/>

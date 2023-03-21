@@ -6,7 +6,7 @@ import {MainButton} from "../MainButton";
 import {FlagOutlined} from "@ant-design/icons";
 import React from "react";
 import Button from '@mui/material/Button';
-import {Link as RouterLink, useNavigate} from 'react-router-dom';
+import {Link as RouterLink} from 'react-router-dom';
 
 export default function ShopItemList({data}) {
     return (
@@ -57,25 +57,55 @@ export default function ShopItemList({data}) {
                             </Grid>
                             <Typography dir="rtl" textAlign="left"
                                         color="#ba0438">  {JSON.stringify(data.price)} تومان </Typography>
-                            <RouterLink style={{
-                                alignContent: 'center',
-                                textAlign: 'center',
-                                textDecoration: 'none',
-                                color: "#450115",
-                                '&:hover': {
-                                    backgroundColor: '#ff0048',
-                                    color: '#ff0048',
-                                    cursor: 'pointer',
-                                    textColor: '#ff0048',
-                                    fontWeight: '20'
-                                }}
-                            } component={<MainButton/>} to={data.redirect_url} variant="outlined">خرید</RouterLink>
-                                <Typography variant="subtitle1" color="grey">{data.updated} :آخرین تغییر
+
+                            {data.is_available &&
+                                (
+                                    <RouterLink style={{
+                                        alignContent: 'center',
+                                        textAlign: 'center',
+                                        textDecoration: 'none',
+                                        color: "#ba0438",
+                                        border: '1px solid #ba0438',
+                                        borderRadius: 5,
+                                        width: 80,
+                                        '&:hover': {
+                                            backgroundColor: '#ff0048',
+                                            color: '#ff0048',
+                                            cursor: 'pointer',
+                                            textColor: '#ff0048',
+                                            fontWeight: '20'
+                                        }
+                                    }
+                                    } component={<MainButton/>} to={data.redirect_url}
+                                                variant="outlined">خرید</RouterLink>
+                                )}
+                            {!data.is_available &&
+                                (
+                                    <RouterLink style={{
+                                        alignContent: 'center',
+                                        textAlign: 'center',
+                                        textDecoration: 'none',
+                                        color: "#ffffff",
+                                        backgroundColor: "rgba(86,78,78,0.74)",
+                                        borderRadius: 5,
+                                        width: 200,
+                                        '&:hover': {
+                                            backgroundColor: '#ff0048',
+                                            color: '#ff0048',
+                                            cursor: 'pointer',
+                                            textColor: '#ff0048',
+                                            fontWeight: '20'
+                                        }
+                                    }
+                                    } component={<MainButton/>} to={data.redirect_url}
+                                                variant="outlined">کالا موجود نیست</RouterLink>
+                                )}
+                            <Typography variant="subtitle1" color="grey">{data.updated} :آخرین تغییر
                                 قیمت </Typography>
-                                </Grid>
-                                </Grid>
-                                </Grid>
-                                </Container>
-                                </>
-                                )
-                            }
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Container>
+        </>
+    )
+}

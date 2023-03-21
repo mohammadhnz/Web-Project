@@ -17,7 +17,7 @@ function Header(props) {
     const getCategories = () => {
         axios({
             method: 'get',
-            url: 'https://2525-31-56-237-194.eu.ngrok.io/nested_categories/list',
+            url: 'https://bd90-31-56-230-17.eu.ngrok.io/nested_categories/list',
             headers: {
                 'Content-Type': 'application/json;charset=UTF-8',
                 'Access-Control-Allow-Origin': '*'
