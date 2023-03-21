@@ -1,7 +1,6 @@
 import * as React from 'react';
-import {styled, createTheme, ThemeProvider} from '@mui/material/styles';
+import {createTheme, ThemeProvider} from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-import MuiDrawer from '@mui/material/Drawer';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
 import Container from '@mui/material/Container';
@@ -17,9 +16,6 @@ import ProductList from "../components/product/ProductList";
 import Typography from "@mui/material/Typography";
 import ProductShopsList from "../components/product/ProductShopsList";
 import Divider from "@mui/material/Divider";
-import axios from "axios";
-import {useState} from "react";
-import {useEffect} from "react";
 
 const drawerWidth = 240;
 

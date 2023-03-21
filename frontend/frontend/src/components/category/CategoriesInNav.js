@@ -24,7 +24,7 @@ export default function CategoriesInNav(props) {
                 category_id: categoryId,
             }
         }).then(function (response) {
-            console.log(response);
+            console.log("category in Nav response", response);
             setProductData(response.data.items)
         }).catch(function (error) {
             console.log(error);
@@ -50,13 +50,7 @@ export default function CategoriesInNav(props) {
     const renderTree = (nodes) => (
         <TreeItem key={nodes.id + JSON.stringify(key)} nodeId={nodes.id}
                   label={
-                      // <RouterLink to={nodes.id} style={{
-                      //     textDecoration: 'none',
-                      //     color: "#3f3031",
-                      //     textColor: "#ff0039"
-                      // }}>{nodes.id}</RouterLink>
                       <Button value={nodes.category_id} onClick={sendCategoryData} style={{
-                          // textDecoration: 'none',
                           color: "#3f3031",
                           textColor: "#ff0039"
                       }}>{nodes.name}</Button>

@@ -4,16 +4,51 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import newProductsFilterTest from "../../static/products2.json";
+import axios from "axios";
 
 export default function ProductFilterSelect({field, setField, fieldItems, setProductData}) {
     const getNewest = () => {
         // TODO: get api for search results
-        return newProductsFilterTest.products.data.items;
+        axios({
+            method: 'get',
+            url: 'https://bd90-31-56-230-17.eu.ngrok.io/product/list',
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+                'Access-Control-Allow-Origin': '*'
+            },
+            params: {
+                sort: 'date_updated+',
+            }
+        }).then(function (response) {
+            console.log("get newest product response", response);
+            return response.data.items
+        }).catch(function (error) {
+            console.log(error);
+            return newProductsFilterTest.products.data.items
+        });
+        return newProductsFilterTest.products.data.items
     }
 
     const getLowestPrice = () => {
         // TODO: get api for search results
-        return newProductsFilterTest.products.data.items;
+        axios({
+            method: 'get',
+            url: 'https://bd90-31-56-230-17.eu.ngrok.io/product/list',
+            headers: {
+                'Content-Type': 'application/json;charset=UTF-8',
+                'Access-Control-Allow-Origin': '*'
+            },
+            params: {
+                sort: 'price-',
+            }
+        }).then(function (response) {
+            console.log("get lowest price response", response);
+            return response.data.items
+        }).catch(function (error) {
+            console.log(error);
+            return newProductsFilterTest.products.data.items
+        });
+        return newProductsFilterTest.products.data.items
     }
 
     const getHighestPrice = () => {

@@ -12,6 +12,7 @@ import newProductsFilterTest from "../static/products2.json";
 import allProducts from "../static/products.json";
 import Grid from "@mui/material/Grid";
 import {MainButton} from "./MainButton";
+import axios from "axios";
 
 
 export default function FiltersListItem({productData, setProductData}) {
@@ -19,7 +20,6 @@ export default function FiltersListItem({productData, setProductData}) {
     const [openCategory, setOpenCategory] = useState(true);
     const [openPrice, setOpenPrice] = useState(true);
     const [showAvailable, setShowAvailable] = useState(true);
-
     const [fromPriceField, fromPriceSet] = useState(0)
     const [toPriceField, toPriceSet] = useState(0)
 
@@ -36,7 +36,62 @@ export default function FiltersListItem({productData, setProductData}) {
 
     const getProductsPriceFilterResult = () => {
         // TODO: get api for search results
-        return newProductsFilterTest.products.data.items;
+        if (fromPriceField === 0) {
+            axios({
+                method: 'get',
+                url: 'https://bd90-31-56-230-17.eu.ngrok.io/product/list',
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                params: {
+                    price__lt: toPriceField,
+                }
+            }).then(function (response) {
+                console.log("search result response in search", response);
+                setProductData(response.data.items)
+            }).catch(function (error) {
+                console.log(error);
+            });
+
+        } else if (toPriceField === 0) {
+            axios({
+                method: 'get',
+                url: 'https://bd90-31-56-230-17.eu.ngrok.io/product/list',
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                params: {
+                    price__gt: fromPriceField,
+                    // price__lt: toPriceField,
+                }
+            }).then(function (response) {
+                console.log("search result response in search", response);
+                setProductData(response.data.items)
+            }).catch(function (error) {
+                console.log(error);
+            });
+        } else {
+            axios({
+                method: 'get',
+                url: 'https://bd90-31-56-230-17.eu.ngrok.io/product/list',
+                headers: {
+                    'Content-Type': 'application/json;charset=UTF-8',
+                    'Access-Control-Allow-Origin': '*'
+                },
+                params: {
+                    price__gt: fromPriceField,
+                    price__lt: toPriceField,
+                }
+            }).then(function (response) {
+                console.log("search result response in search", response);
+                setProductData(response.data.items)
+            }).catch(function (error) {
+                console.log(error);
+            });
+        }
+        // return newProductsFilterTest.products.data.items;
     }
 
     const getProductAvailable = () => {
@@ -53,8 +108,8 @@ export default function FiltersListItem({productData, setProductData}) {
         event.preventDefault();
         console.log(toPriceField)
         console.log(fromPriceField)
-        const newProductList = getProductsPriceFilterResult()
-        setProductData(newProductList)
+        getProductsPriceFilterResult()
+        // setProductData(newProductList)
     }
 
     const handleShowAvailable = (event) => {

@@ -33,29 +33,6 @@ export default function SignUp() {
         gender: true,
     })
 
-    const postSignUpData = (data) => {
-        data["gender"] = "male";
-        data["account_type"] = "seller";
-
-        // instance.post('/core/register/', data).then((res) => {
-        //     console.log(res);
-        // })
-        //     .catch(error => {
-        //
-        //     });
-
-        // const response = fetch("https://e02f-31-56-237-194.eu.ngrok.io/core/register/", {
-        //     method: 'POST',
-        //     body: data,
-        //     headers: {
-        //         'Bypass-Tunnel-Reminder': 'Bypass-Tunnel-Reminder',
-        //         'Content-Type': 'application/json;charset=UTF-8',
-        //         'Access-Control-Allow-Origin': '*'
-        //     }
-        // });
-        // console.log(response.data)
-    }
-
 
     const handleSubmit = (event) => {
         event.preventDefault();
@@ -73,50 +50,9 @@ export default function SignUp() {
             account_type: "seller"
         }
         console.log("post data: ", d)
-        // instance.put('/core/register/', d).then((res) => {
-        //     console.log(res);
-        // })
-        //     .catch(error => {
-        //         console.log(error);
-        //     });
-
-        // const response = fetch("https://e02f-31-56-237-194.eu.ngrok.io/core/register/", {
-        //     method: 'PUT',
-        //     body: data,
-        //     headers: {
-        //         // 'Bypass-Tunnel-Reminder': 'Bypass-Tunnel-Reminder',
-        //         'Content-Type': 'application/json;charset=UTF-8',
-        //         // 'Access-Control-Allow-Origin': '*'
-        //     }
-        // });
-        // console.log(response)
-        // const requestOptions = {
-        //     method: 'POST',
-        //     headers: {
-        //         // 'Content-Type': 'application/json',
-        //     },
-        //     body: d
-        // };
-
-        // fetch('http://0.0.0.0:8080/core/register/', {
-        //     method: 'POST',
-        //     body: {'h': 'dh'},
-        //     headers:{
-        //         'Content-Type': 'application/json;charset=UTF-8',
-        //         'Access-Control-Allow-Origin': '*'
-        //     }
-        // })
-        //     .then(res => console.log(res.headers)
-        //     )
-        //     .then(res => {
-        //         console.log(res)
-        //     }).catch((err) => {
-        //     console.log(err);
-        // });
-
         axios({
             method: 'post',
-            url: 'https://e02f-31-56-237-194.eu.ngrok.io/core/register/',
+            url: 'https://bd90-31-56-230-17.eu.ngrok.io/core/register/',
             data: d,
             headers: {
                 'Content-Type': 'application/json;charset=UTF-8',
@@ -144,22 +80,13 @@ export default function SignUp() {
     }
     const handlePassChange = (e) => {
         e.preventDefault()
-        // const {name, value} = e.target
-        // if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(value)) {
-        //     setFieldState((prevForm) => ({...prevForm, password: true}))
-        // } else {
         setFieldState((prevForm) => ({...prevForm, password: false}))
-        // }
     }
 
     const handlePassValChange = (e) => {
         e.preventDefault()
         const {name, value} = e.target
-        // if (!/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/.test(value)) {
-        //     setFieldState((prevForm) => ({...prevForm, password_confirm: true}))
-        // } else {
         setFieldState((prevForm) => ({...prevForm, password_confirm: false}))
-        // }
     }
 
     const handleNameChange = (e) => {

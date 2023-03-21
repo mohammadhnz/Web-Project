@@ -13,29 +13,11 @@ import {Link as RouterLink} from 'react-router-dom';
 
 export default function ProductDetail({data}) {
 
-    const handleAddToWishlist = data => {
-
-    };
-
-    const handleAddToCartList = data => {
-
-    };
-
     return (
         <>
             <Container maxWidth="lg" sx={{mt: 4, mb: 4}}>
                 <Grid container spacing={4}>
                     <Grid item xs={12} md={2} lg={3} alignContent="center">
-                        {/*<Box*/}
-                        {/*    component="img"*/}
-                        {/*    sx={{*/}
-                        {/*        width: 150,*/}
-                        {/*        height: 150,*/}
-                        {/*    }}*/}
-                        {/*    src={noImage}*/}
-                        {/*    alt="Product Image"*/}
-                        {/*>*/}
-                        {/*</Box>*/}
                         <Image sx={{
                             width: 120,
                             height: 120,

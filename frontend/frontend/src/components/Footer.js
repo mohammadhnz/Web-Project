@@ -2,18 +2,6 @@ import * as React from 'react';
 import {Box, Container, CssBaseline, Link} from "@mui/material";
 import {Typography} from "antd";
 
-function Copyright() {
-    return (
-        <Typography variant="body2" style={{color: "grey"}}>
-            {'Copyright © '}
-            <Link color="inherit" href="">
-                Marvellona
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
 
 export default function StickyFooter() {
 

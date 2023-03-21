@@ -1,14 +1,11 @@
 import Grid from "@mui/material/Grid";
-import {Box, Container, Drawer, ThemeProvider} from "@mui/material";
+import {Container} from "@mui/material";
 import noImage from "../images/no-image.png";
 import Typography from "@mui/material/Typography";
 import {MainButton} from "../MainButton";
-import IconButton from "@mui/material/IconButton";
-import {FavoriteBorderOutlined, Notifications, Share, Star, Stars} from "@material-ui/icons";
 import {FlagOutlined} from "@ant-design/icons";
 import React from "react";
 import Button from '@mui/material/Button';
-import {createTheme} from "@mui/material/styles";
 import {Link as RouterLink, useNavigate} from 'react-router-dom';
 
 export default function ShopItemList({data}) {
@@ -61,24 +58,24 @@ export default function ShopItemList({data}) {
                             <Typography dir="rtl" textAlign="left"
                                         color="#ba0438">  {JSON.stringify(data.price)} تومان </Typography>
                             <RouterLink style={{
-
-                                borderRadius: 5,
-                                borderColor: "#ba0438",
-                                fontSize: "14px",
-                                color: "#ba0438",
-                                fontWeight: "bold",
-                                border: '2px solid',
-                                width: "100px",
+                                alignContent: 'center',
+                                textAlign: 'center',
+                                textDecoration: 'none',
+                                color: "#450115",
                                 '&:hover': {
-                                    backgroundColor: '#450115',
-                                },
-                            }} component={<MainButton/>} to={data.redirect_url} variant="outlined">خرید</RouterLink>
-                            <Typography variant="subtitle1" color="grey">{data.updated} :آخرین تغییر
+                                    backgroundColor: '#ff0048',
+                                    color: '#ff0048',
+                                    cursor: 'pointer',
+                                    textColor: '#ff0048',
+                                    fontWeight: '20'
+                                }}
+                            } component={<MainButton/>} to={data.redirect_url} variant="outlined">خرید</RouterLink>
+                                <Typography variant="subtitle1" color="grey">{data.updated} :آخرین تغییر
                                 قیمت </Typography>
-                        </Grid>
-                    </Grid>
-                </Grid>
-            </Container>
-        </>
-    )
-}
+                                </Grid>
+                                </Grid>
+                                </Grid>
+                                </Container>
+                                </>
+                                )
+                            }

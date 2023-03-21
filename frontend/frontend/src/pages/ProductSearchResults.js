@@ -11,11 +11,9 @@ import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import Header from "../components/Header";
 import FiltersListItem from "../components/FiltersListItems";
 import products from "../static/products.json"
-import products2 from "../static/products2.json"
 import ProductList from "../components/product/ProductList";
 import {useEffect, useRef} from "react";
 import {useState} from "react";
-import Footer from "../components/Footer";
 import ProductFilterSelect from "../components/product/ProductFilterSelect";
 import {useLocation} from "react-router-dom";
 import axios from "axios";
@@ -85,7 +83,7 @@ export default function ProductSearchResults() {
     const getProductsSearchResult = () => {
         axios({
             method: 'get',
-            url: 'https://2525-31-56-237-194.eu.ngrok.io/product/list',
+            url: 'https://bd90-31-56-230-17.eu.ngrok.io/product/list',
             headers: {
                 'Content-Type': 'application/json;charset=UTF-8',
                 'Access-Control-Allow-Origin': '*'
