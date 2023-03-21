@@ -222,7 +222,7 @@ class ProductListQuery(DataClass):
         if sort.startswith('date_updated'):
             self.sort = {"last_history.created_at": {"order": "desc" if sort[-1] == '-' else "asc"}}
         if sort.startswith('price'):
-            self.sort = {"last_history.price": {"order": "desc" if sort[-1] == '-' else "asc"}}
+            self.sort = {"last_history.min_price": {"order": "desc" if sort[-1] == '-' else "asc"}}
 
     def _get_match_query(self, field, value):
         return {
